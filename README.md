@@ -54,8 +54,10 @@ Here is a list of the technology stack for a server-side:
 │   ├── `responsible-app` \
 │   └── `responsible-backend` \
 ├── `.gitignore` \
+├── `README.md` \
+├── `package-lock.json` \
 ├── `package.json` \
-└── `README.md`
+└── `turbo.json`
 
 ## How To Use
 From your command line, first clone the repository into your local machine:
