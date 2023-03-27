@@ -49,14 +49,14 @@ Here is a list of the technology stack for a server-side:
 
 ## Project Structure 
 milk-production-company
-├── .husky
-├── .turbo
-├── apps
-│   ├── responsible-app
-│   └── responsible-backend
-├── .gitignore
-├── package.json
-└── README.md
+┌── `.husky` \
+├── `.turbo` \
+├── `apps` \
+│   ├── `responsible-app` \
+│   └── `responsible-backend` \
+├── `.gitignore` \
+├── `package.json` \
+└── `README.md`
 
 ## How To Use
 From your command line, first clone the repository into your local machine:
