@@ -48,7 +48,6 @@ Here is a list of the technology stack for a server-side:
 - [npm](https://www.npmjs.com/)
 
 ## Project Structure 
-milk-production-company
 ┌── `.husky` \
 ├── `.turbo` \
 ├── `apps` \
