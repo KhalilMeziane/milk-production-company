@@ -49,7 +49,6 @@ Here is a list of the technology stack for a server-side:
 
 ## Project Structure 
 ┌── `.husky` \
-├── `.turbo` \
 ├── `apps` \
 │   ├── `responsible-app` \
 │   └── `responsible-backend` \
