@@ -11,7 +11,7 @@ import { Input } from '@components/forms/fields/_index'
 export default function DeleteCow ({ onClose }) {
     const initialValues = { id: '' }
     const validationSchema = yup.object().shape({
-        id: yup.string().oneOf(['123e4567-e89b-12d3-a456-426655440000'], 'Cow Id Not Match').required('Cow ID is required')
+        id: yup.string().oneOf(['123e4567-e89b-12d3-a456-426655'], 'Cow Id Not Match').required('Cow ID is required')
     })
 
     return (
@@ -31,7 +31,10 @@ export default function DeleteCow ({ onClose }) {
                     () => {
                         return (
                             <Form>
-                                <Input label="Cow Id" name="id" placeholder="123e4567-e89b-12d3-a456-426655440000" />
+                                <Text color="gray.900" fontSize="md" mb="1">
+                                    Enter the Cow Id <Text display='inline' fontWeight="semibold">123e4567-e89b-12d3-a456-426655</Text> to continue:
+                                </Text>
+                                <Input name="id" placeholder="123e4567-e89b-12d3-a456-426655" />
                                 <HStack justifyContent="flex-end" mt="2">
                                     <Button px="5" rounded="sm" colorScheme="red" variant="outline" fontWeight="medium" onClick={onClose}>Close</Button>
                                     <Button type="submit" bg="red.500" px="5" rounded="sm" colorScheme="red" fontWeight="medium">Delete</Button>

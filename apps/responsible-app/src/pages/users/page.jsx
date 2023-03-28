@@ -11,7 +11,7 @@ import { AddUser } from './components/blocks'
 
 const MenuList = [
     {
-        title: 'Delete Cow',
+        title: 'Delete User',
         text: 'Delete',
         icon: MdDeleteOutline,
         body: <DeleteUser />
