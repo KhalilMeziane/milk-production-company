@@ -2,7 +2,7 @@ import React from 'react'
 
 import { Avatar, Box, Flex, HStack, Menu, MenuButton, MenuDivider, MenuItem, MenuList, Heading } from '@chakra-ui/react'
 import { Link as LinkRouter } from 'react-router-dom'
-import { FiChevronDown } from 'react-icons/fi'
+import { FiChevronDown, FiUsers } from 'react-icons/fi'
 import { VscSignOut } from 'react-icons/vsc'
 import { AiOutlineUser } from 'react-icons/ai'
 import { TbReportAnalytics } from 'react-icons/tb'
@@ -11,6 +11,7 @@ import { Brand } from '@config/constants'
 
 const MenuItems = [
     { name: 'Cows', path: '/cows', icon: TbReportAnalytics },
+    { name: 'Users', path: '/users', icon: FiUsers },
     { name: 'Profile', path: '/profile', icon: AiOutlineUser }
 ]
 

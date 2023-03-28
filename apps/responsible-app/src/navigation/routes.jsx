@@ -4,6 +4,7 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 
 import Login from '@pages/login/page'
 import Cows from '@pages/cows/page'
+import Users from '@pages/users/page'
 
 const routes = createBrowserRouter([
     {
@@ -13,6 +14,10 @@ const routes = createBrowserRouter([
     {
         path: '/cows',
         element: <Cows />
+    },
+    {
+        path: '/users',
+        element: <Users />
     }
 ])
 
