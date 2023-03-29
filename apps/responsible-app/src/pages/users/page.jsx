@@ -23,6 +23,7 @@ const tableHeadColumns = [
     { Header: 'id', accessor: 'id' },
     { Header: 'fullName', accessor: 'fullName' },
     { Header: 'email', accessor: 'email' },
+    { Header: 'role', accessor: 'role' },
     { Header: 'createdAt', accessor: 'createdAt' },
     { Header: 'action', accessor: 'action', Cell: (props) => <Menu data={props} menuList={MenuList}><MenuButton><Icon fontSize={'20'} as={BiDotsVerticalRounded} /></MenuButton></Menu> }
 ]
@@ -32,31 +33,37 @@ const data = [
         id: '456-544-544',
         fullName: 'khalil',
         email: 'khalil@gmail.com',
-        createdAt: '2023-03-29'
+        createdAt: '2023-03-29',
+        role: 'admin'
     },
     {
         id: '456-544-544',
         fullName: 'khalil',
         email: 'khalil@gmail.com',
-        createdAt: '2023-03-29'
+        createdAt: '2023-03-29',
+        role: 'moderator'
+
     },
     {
         id: '456-544-544',
         fullName: 'khalil',
         email: 'khalil@gmail.com',
-        createdAt: '2023-03-29'
+        createdAt: '2023-03-29',
+        role: 'moderator'
     },
     {
         id: '456-544-544',
         fullName: 'khalil',
         email: 'khalil@gmail.com',
-        createdAt: '2023-03-29'
+        createdAt: '2023-03-29',
+        role: 'moderator'
     },
     {
         id: '456-544-544',
         fullName: 'khalil',
         email: 'khalil@gmail.com',
-        createdAt: '2023-03-29'
+        createdAt: '2023-03-29',
+        role: 'moderator'
     }
 ]
 

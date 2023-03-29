@@ -6,13 +6,14 @@ import { Form } from 'formik'
 import * as yup from 'yup'
 
 import FormCustom from '@components/forms/form'
-import { Input } from '@components/forms/fields/_index'
+import { Input, Select } from '@components/forms/fields/_index'
 
-const initialValues = { fullName: '', email: '', password: '' }
+const initialValues = { fullName: '', email: '', password: '', role: '' }
 const validationSchema = yup.object().shape({
     email: yup.string().email('Invalid email').required('Email is required'),
     password: yup.string().min(8, 'Minium 8 characters').max(30, 'Maximum 30 characters').required('Password is required'),
-    fullName: yup.string().min(6, 'Minium 8 characters').max(30, 'Maximum 30 characters').required('full Name is required')
+    fullName: yup.string().min(6, 'Minium 8 characters').max(30, 'Maximum 30 characters').required('full Name is required'),
+    role: yup.string().oneOf(['admin', 'moderator'], 'Invalid option selected').required('User Role is required')
 })
 
 export default function AddCow ({ onClose }) {
@@ -28,6 +29,11 @@ export default function AddCow ({ onClose }) {
                             <Form>
                                 <Input label="fullName" name="fullName" placeholder="john doe"/>
                                 <Input label="Email address" name="email" type="email" placeholder="john.doe@example.com"/>
+                                <Select label="User Role" name="role">
+                                    <option value="" selected disabled>Select User Role</option>
+                                    <option value="admin">Admin</option>
+                                    <option value="moderator">Moderator</option>
+                                </Select>
                                 <Input label="Password" name="password" type="password" placeholder="password"/>
                                 <HStack justifyContent="flex-end" mt="2">
                                     <Button px="5" rounded="sm" colorScheme="brand" variant="outline" fontWeight="medium" onClick={onClose}>Close</Button>
