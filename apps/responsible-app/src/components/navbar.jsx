@@ -6,14 +6,14 @@ import { FiChevronDown, FiUsers } from 'react-icons/fi'
 import { VscSignOut } from 'react-icons/vsc'
 import { AiOutlineUser } from 'react-icons/ai'
 import { TbReportAnalytics } from 'react-icons/tb'
+import Drawer from './drawer'
 
 import { Brand } from '@config/constants'
 
 const MenuItems = [
     { name: 'Cows', path: '/cows', icon: TbReportAnalytics },
     { name: 'Users', path: '/users', icon: FiUsers },
-    { name: 'Milk', path: '/milk', icon: AiOutlineUser },
-    { name: 'Profile', path: '/profile', icon: AiOutlineUser }
+    { name: 'Milk', path: '/milk', icon: AiOutlineUser }
 ]
 
 export default function Navbar (props) {
@@ -60,6 +60,10 @@ export default function Navbar (props) {
                                     {name}
                                 </MenuItem>
                             ))}
+                            <Drawer title="Profile">
+                                <MenuItem icon={<AiOutlineUser />}>Profile</MenuItem>
+                                <Box>Profile</Box>
+                            </Drawer>
                             <MenuDivider />
                             <MenuItem icon={<VscSignOut />}>Sign out</MenuItem>
                         </MenuList>
