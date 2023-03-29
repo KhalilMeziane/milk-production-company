@@ -5,7 +5,7 @@ import 'regenerator-runtime'
 import { useTable, usePagination, useFilters, useGlobalFilter, useAsyncDebounce } from 'react-table'
 import { Table, Thead, Tbody, Tr, Th, Td } from '@chakra-ui/table'
 import { Box, Flex, Select, HStack, IconButton, Heading, InputGroup, InputLeftElement, Input } from '@chakra-ui/react'
-import { IoIosArrowDropright, IoIosArrowDropleft } from 'react-icons/io'
+import { IoIosArrowBack, IoIosArrowForward } from 'react-icons/io'
 import { AiOutlineSearch } from 'react-icons/ai'
 
 export default function CustomTable ({ data, columns: cols, title, optionsList, ...props }) {
@@ -132,21 +132,23 @@ const TableFooter = ({ state, setPageSize, previousPage, canPreviousPage, nextPa
             </Select>
             <HStack p={'1.5'}>
                 <IconButton
-                    color={'brand'}
+                    colorScheme="brand"
                     onClick={() => previousPage()}
                     disabled={!canPreviousPage}
                     aria-label='page précédent'
-                    icon={<IoIosArrowDropleft />}
+                    rounded="sm"
+                    icon={<IoIosArrowBack fontSize="16px" />}
                 />
                 <Box w={'16'} textAlign={'center'}>
                     {state.pageIndex + 1} of {pageOptions.length}
                 </Box>
                 <IconButton
-                    color={'brand'}
+                    colorScheme="brand"
                     onClick={() => nextPage()}
                     disabled={!canNextPage}
                     aria-label='page précédent'
-                    icon={<IoIosArrowDropright />}
+                    rounded="sm"
+                    icon={<IoIosArrowForward fontSize="16px" />}
                 />
             </HStack>
         </Flex>

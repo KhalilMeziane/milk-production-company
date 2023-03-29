@@ -9,7 +9,7 @@ import FormCustom from '@components/forms/form'
 import { Input } from '@components/forms/fields/_index'
 
 export default function EditCow ({ onClose }) {
-    const initialValues = { size: '', day: '' }
+    const initialValues = { size: '50', day: '' }
     const validationSchema = yup.object().shape({
         size: yup.number('milk size must be number').required('Milk Size is required'),
         day: yup.date().required('Entry Day is required')
@@ -24,7 +24,7 @@ export default function EditCow ({ onClose }) {
                     () => {
                         return (
                             <Form>
-                                <Input label="Milk size" name="size" type="number" placeholder="0" />
+                                <Input value={45} label="Milk size" name="size" type="number" placeholder="0" />
                                 <Input label="Entry day" name="day" type="date" />
                                 <HStack justifyContent="flex-end" mt="2">
                                     <Button px="5" rounded="sm" colorScheme="brand" variant="outline" fontWeight="medium" onClick={onClose}>Close</Button>

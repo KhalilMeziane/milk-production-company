@@ -10,7 +10,7 @@ import { Input } from '@components/forms/fields/_index'
 
 const initialValues = { size: 0, day: '' }
 const validationSchema = yup.object().shape({
-    size: yup.number('milk size must be number').required('Milk Size is required'),
+    size: yup.number('milk size must be number').required('Milk Size is required').positive(),
     day: yup.date().required('Entry Day is required')
 })
 
@@ -25,7 +25,7 @@ export default function AddSize ({ onClose }) {
                     () => {
                         return (
                             <Form>
-                                <Input label="Milk size" name="size" type="number" />
+                                <Input label="Milk size" name="size" type="number" placeholder="0" />
                                 <Input label="Entry day" name="day" type="date" />
                                 <HStack justifyContent="flex-end" mt="2">
                                     <Button px="5" rounded="sm" colorScheme="brand" variant="outline" fontWeight="medium" onClick={onClose}>Close</Button>

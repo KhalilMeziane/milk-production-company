@@ -11,7 +11,7 @@ import { Input } from '@components/forms/fields/_index'
 export default function DeleteCow ({ onClose }) {
     const initialValues = { day: '' }
     const validationSchema = yup.object().shape({
-        day: yup.date('Invalid Day').oneOf(['2023-03-29'], 'Day Not Match').required('Day is required')
+        day: yup.string().oneOf(['2023-03-29'], 'Day Not Match').required('Day is required')
     })
 
     return (
