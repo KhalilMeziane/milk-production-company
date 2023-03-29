@@ -5,6 +5,7 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import Login from '@pages/login/page'
 import Cows from '@pages/cows/page'
 import Users from '@pages/users/page'
+import Milk from '@pages/milk/page'
 
 const routes = createBrowserRouter([
     {
@@ -18,6 +19,10 @@ const routes = createBrowserRouter([
     {
         path: '/users',
         element: <Users />
+    },
+    {
+        path: '/milk',
+        element: <Milk />
     }
 ])
 

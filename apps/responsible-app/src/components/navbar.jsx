@@ -12,6 +12,7 @@ import { Brand } from '@config/constants'
 const MenuItems = [
     { name: 'Cows', path: '/cows', icon: TbReportAnalytics },
     { name: 'Users', path: '/users', icon: FiUsers },
+    { name: 'Milk', path: '/milk', icon: AiOutlineUser },
     { name: 'Profile', path: '/profile', icon: AiOutlineUser }
 ]
 
