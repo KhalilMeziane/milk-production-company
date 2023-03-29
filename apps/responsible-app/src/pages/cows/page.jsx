@@ -8,9 +8,15 @@ import { FiEdit } from 'react-icons/fi'
 import { Brand } from '@config/constants'
 import { Menu, Layout, Head, Table } from '@components/_index'
 import { AddCow, Filter } from './components/blocks'
-import { DeleteCow, EditCow } from './components/forms/_index'
+import { DeleteCow, EditCow, Medical } from './components/forms/_index'
 
 const MenuList = [
+    {
+        title: 'Add Medical Examination',
+        text: 'Disease',
+        icon: FiEdit,
+        body: <Medical />
+    },
     {
         title: 'Edit Cow',
         text: 'Edit',

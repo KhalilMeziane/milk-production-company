@@ -64,7 +64,7 @@ export default function Users () {
     return (
         <>
             <Head>
-                <title>Cows | {Brand}</title>
+                <title>Users | {Brand}</title>
             </Head>
             <Layout bgColor="white" p="4" border="1px" borderColor="gray.200">
                 <Table
