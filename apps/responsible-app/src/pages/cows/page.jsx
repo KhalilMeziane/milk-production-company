@@ -1,20 +1,27 @@
 import React from 'react'
 
 import { MenuButton, Icon } from '@chakra-ui/react'
-import { MdDeleteOutline } from 'react-icons/md'
+import { MdOutlineMedicalServices, MdOutlineDeleteOutline } from 'react-icons/md'
 import { BiDotsVerticalRounded } from 'react-icons/bi'
 import { FiEdit } from 'react-icons/fi'
+import { BsInfoSquare } from 'react-icons/bs'
 
 import { Brand } from '@config/constants'
 import { Menu, Layout, Head, Table } from '@components/_index'
-import { AddCow, Filter } from './components/blocks'
+import { AddCow, Filter, ViewCow } from './components/blocks'
 import { DeleteCow, EditCow, Medical } from './components/forms/_index'
 
 const MenuList = [
     {
+        title: 'View Cow',
+        text: 'View',
+        icon: BsInfoSquare,
+        body: <ViewCow />
+    },
+    {
         title: 'Add Medical Examination',
         text: 'Disease',
-        icon: FiEdit,
+        icon: MdOutlineMedicalServices,
         body: <Medical />
     },
     {
@@ -26,7 +33,7 @@ const MenuList = [
     {
         title: 'Delete Cow',
         text: 'Delete',
-        icon: MdDeleteOutline,
+        icon: MdOutlineDeleteOutline,
         body: <DeleteCow />
     }
 
