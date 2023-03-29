@@ -1,25 +1,49 @@
-import React from 'react'
+import React, { useContext, useState } from 'react'
 
-import { Button } from '@chakra-ui/react'
 import { Form } from 'formik'
+import { Button, Text } from '@chakra-ui/react'
 import * as yup from 'yup'
+import { useNavigate } from 'react-router-dom'
 
 import FormCustom from '@components/forms/form'
 import Input from '@components/forms/fields/input'
+import { Login } from '@services/http-client'
+import { Store } from '@store/context'
 
 const initialValues = { email: '', password: '' }
 
 const validationSchema = yup.object().shape({
     email: yup.string().email('Invalid email').required('Email is required'),
-    password: yup.string().min(8, 'Minium 8 characters').max(30, 'Maximum 30 characters').required('Password is required')
+    password: yup.string().required('Password is required')
 })
 
 export default function LoginForm () {
+    const [error, setError] = useState(false)
+    const [isLoading, setLoading] = useState(false)
+    const [, dispatch] = useContext(Store)
+    const navigate = useNavigate()
+    const handelSubmit = async (values) => {
+        try {
+            setLoading(true)
+            const { data } = await Login(values)
+            dispatch({ type: 'AUTH_LOGIN', payload: data })
+            navigate('/cows')
+        } catch (error) {
+            setError('Invalid email or password')
+            console.log('http error: ', error.response)
+        } finally {
+            setLoading(false)
+        }
+    }
     return (
         <>
+            {
+                error && <Text textAlign={'center'} textTransform={'capitalize'} py={3} px={2} color='red.500' rounded='sm' bg={'red.50'} mb='4'>{error}</Text>
+            }
             <FormCustom
                 initialValues={initialValues}
                 validationSchema={validationSchema}
+                handelSubmit={handelSubmit}
             >
                 {
                     () => {
@@ -27,7 +51,7 @@ export default function LoginForm () {
                             <Form>
                                 <Input label="Email address" name="email" type="email" placeholder="john.doe@example.com"/>
                                 <Input label="Password" name="password" type="password" placeholder="password"/>
-                                <Button type="submit" w='full' my='3' color='white' bg="brand.900" colorScheme="brand" >Sign in</Button>
+                                <Button type="submit" w='full' my='3' color='white' bg="brand.900" colorScheme="brand" isLoading={isLoading} >Sign in</Button>
                             </Form>
                         )
                     }

@@ -5,14 +5,17 @@ import { HelmetProvider } from 'react-helmet-async'
 
 import Navigation from '@navigation/routes'
 import { theme, Font } from '@config/theme'
+import { ContextProvider } from '@store/context'
 
 export default function App () {
     return (
-        <HelmetProvider>
-            <ChakraProvider theme={theme}>
-                <Font />
-                <Navigation />
-            </ChakraProvider>
-        </HelmetProvider>
+        <ContextProvider>
+            <HelmetProvider>
+                <ChakraProvider theme={theme}>
+                    <Font />
+                    <Navigation />
+                </ChakraProvider>
+            </HelmetProvider>
+        </ContextProvider>
     )
 }

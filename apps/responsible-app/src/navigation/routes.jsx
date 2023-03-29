@@ -1,6 +1,8 @@
-import React from 'react'
+import React, { useContext } from 'react'
 
-import { createBrowserRouter, RouterProvider } from 'react-router-dom'
+import { createBrowserRouter, RouterProvider, Navigate, Outlet } from 'react-router-dom'
+
+import { Store } from '@store/context'
 
 import Login from '@pages/login/page'
 import Cows from '@pages/cows/page'
@@ -9,20 +11,30 @@ import Milk from '@pages/milk/page'
 
 const routes = createBrowserRouter([
     {
-        path: '/',
-        element: <Login />
+        element: <PublicRoute />,
+        children: [
+            {
+                path: '/',
+                element: <Login />
+            }
+        ]
     },
     {
-        path: '/cows',
-        element: <Cows />
-    },
-    {
-        path: '/users',
-        element: <Users />
-    },
-    {
-        path: '/milk',
-        element: <Milk />
+        element: <ProtectedRoute />,
+        children: [
+            {
+                path: '/cows',
+                element: <Cows />
+            },
+            {
+                path: '/users',
+                element: <Users />
+            },
+            {
+                path: '/milk',
+                element: <Milk />
+            }
+        ]
     }
 ])
 
@@ -30,4 +42,22 @@ export default function Navigation () {
     return (
         <RouterProvider router={routes}/>
     )
+}
+
+function ProtectedRoute () {
+    const [state] = useContext(Store)
+    const { auth } = state
+    if (!auth?.accessToken) {
+        return <Navigate to="/" />
+    }
+    return <Outlet />
+}
+
+function PublicRoute () {
+    const [state] = useContext(Store)
+    const { auth } = state
+    if (auth?.accessToken) {
+        return <Navigate to="/cows" />
+    }
+    return <Outlet />
 }

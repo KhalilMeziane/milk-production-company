@@ -15,15 +15,15 @@ const validationSchema = yup.object().shape({
     fullName: yup.string().min(6, 'Minium 8 characters').max(30, 'Maximum 30 characters').required('full Name is required')
 })
 
-export default function Profile ({ onClose }) {
+export default function Profile ({ user, onClose }) {
     return (
         <>
             <VStack alignItems="flex-start" w="full">
                 <HStack>
-                    <Avatar h="20" w="20" rounded="full" name="khalil meziane" />
+                    <Avatar h="20" w="20" rounded="full" name={user.fullName} />
                     <VStack alignItems="flex-start">
-                        <Heading as="h2" size="md">khalil meziane</Heading>
-                        <Text>khalil@gmail.com</Text>
+                        <Heading as="h2" size="md">{user.fullName}</Heading>
+                        <Text>{user.email}</Text>
                     </VStack>
                 </HStack>
                 <Divider />
@@ -35,8 +35,8 @@ export default function Profile ({ onClose }) {
                         () => {
                             return (
                                 <Form style={{ width: '100%' }}>
-                                    <Input label="fullName" name="fullName" placeholder="john doe"/>
-                                    <Input label="Email address" name="email" type="email" placeholder="john.doe@example.com"/>
+                                    <Input label="fullName" name="fullName" placeholder="john doe" value={user.fullName} />
+                                    <Input label="Email address" name="email" type="email" placeholder="john.doe@example.com" value={user.email} />
                                     <Input label="Password" name="password" type="password" placeholder="password"/>
                                     <HStack justifyContent="flex-end" mt="2" position="absolute" bottom="2" right="2">
                                         <Button px="5" rounded="sm" colorScheme="gray" variant="outline" fontWeight="medium" onClick={onClose}>Close</Button>
@@ -53,5 +53,6 @@ export default function Profile ({ onClose }) {
 }
 
 Profile.propTypes = {
+    user: PropTypes.object.isRequired,
     onClose: PropTypes.func.isRequired
 }
