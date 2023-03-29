@@ -7,6 +7,7 @@ import { VscSignOut } from 'react-icons/vsc'
 import { AiOutlineUser } from 'react-icons/ai'
 import { TbReportAnalytics } from 'react-icons/tb'
 import Drawer from './drawer'
+import Profile from './profile'
 
 import { Brand } from '@config/constants'
 
@@ -62,7 +63,7 @@ export default function Navbar (props) {
                             ))}
                             <Drawer title="Profile">
                                 <MenuItem icon={<AiOutlineUser />}>Profile</MenuItem>
-                                <Box>Profile</Box>
+                                <Profile />
                             </Drawer>
                             <MenuDivider />
                             <MenuItem icon={<VscSignOut />}>Sign out</MenuItem>
