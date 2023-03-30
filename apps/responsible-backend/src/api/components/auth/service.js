@@ -17,14 +17,14 @@ exports.login = async ({ email, password }) => {
         }
         return comparePassword(user.password, password)
             .then(match => {
-                console.log('match: ', match)
                 if (!match) {
                     return reject(createError.BadRequest('Invalid email or password'))
                 }
                 const { password, ...targetUser } = user
+                console.log('user from login: ', user)
                 return Promise.all([
-                    signAccessToken({ id: user.id }),
-                    signRefreshToken({ id: user.id }),
+                    signAccessToken({ id: user.id, fullName: user.fullName }),
+                    signRefreshToken({ id: user.id, fullName: user.fullName }),
                     data,
                     targetUser
                 ])
@@ -72,8 +72,8 @@ exports.createUser = async ({ email, password, fullName }) => {
                     password: hash
                 }
                 return Promise.all([
-                    signAccessToken({ id }),
-                    signRefreshToken({ id }),
+                    signAccessToken({ id, fullName: user.fullName }),
+                    signRefreshToken({ id, fullName: user.fullName }),
                     newUser
                 ])
             })
