@@ -62,29 +62,20 @@ exports.createUser = async ({ email, password, fullName }) => {
         if (user) {
             return reject(createError.Conflict('Credentials is already registered'))
         }
-        const id = uuidv4()
         return hashPassword(password)
             .then(hash => {
                 const newUser = {
-                    id,
+                    id: uuidv4(),
                     fullName,
                     email,
                     password: hash
                 }
-                return Promise.all([
-                    signAccessToken({ id, fullName: user.fullName }),
-                    signRefreshToken({ id, fullName: user.fullName }),
-                    newUser
-                ])
-            })
-            .then(obj => {
-                const [accessToken, refreshToken, newUser] = obj
-                data.users.push({ ...newUser, refreshToken })
-                const { password, ...targetUser } = newUser
+                data.users.push(newUser)
+                const { password, ...user } = newUser
                 fs.writeFile(dbUri, JSON.stringify({ ...data }), 'utf8', (err) => {
                     if (err) throw err
                 })
-                return resolve({ ...targetUser, accessToken, refreshToken })
+                return resolve(user)
             })
             .catch(error => {
                 console.log('S error: ', error)
