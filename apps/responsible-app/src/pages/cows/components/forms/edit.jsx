@@ -48,12 +48,12 @@ export default function EditCow ({ onClose, data }) {
                     () => {
                         return (
                             <Form>
-                                <Select value={data.breed} label="Cow Breed" name="breed">
+                                <Select label="Cow Breed" name="breed">
                                     <option value="" selected disabled>Select Cow Breed</option>
                                     <option value="holstein">Holstein</option>
                                     <option value="montbliard">Montbliard</option>
                                 </Select>
-                                <Input value={data.entryDate} label="Entry Date" name="entryDate" type="date" />
+                                <Input label="Entry Date" name="entryDate" type="date" />
                                 <HStack justifyContent="flex-end" mt="2">
                                     <Button px="5" rounded="sm" colorScheme="brand" variant="outline" fontWeight="medium" onClick={onClose}>Close</Button>
                                     <Button type="submit" rounded="sm" color='white' bg="brand.900" colorScheme="brand" isLoading={isLoading}>Update</Button>

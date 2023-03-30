@@ -11,7 +11,7 @@ import { Store } from '@store/context'
 import { UpdateMilk } from '@services/http-client'
 
 export default function EditMilk ({ onClose, data }) {
-    const initialValues = { size: '', entryDate: '' }
+    const initialValues = { size: data.size, entryDate: data.entryDate }
     const validationSchema = yup.object().shape({
         size: yup.number('milk size must be number').required('Milk Size is required'),
         entryDate: yup.date().required('Entry Day is required')
@@ -54,7 +54,7 @@ export default function EditMilk ({ onClose, data }) {
                         return (
                             <Form>
                                 <Input label="Milk size" name="size" type="number" placeholder={data.size} />
-                                <Input label="Entry day" name="entryDate" type="date" />
+                                <Input label="Entry day" name="entryDate" type="date"/>
                                 <HStack justifyContent="flex-end" mt="2">
                                     <Button px="5" rounded="sm" colorScheme="brand" variant="outline" fontWeight="medium" onClick={onClose}>Close</Button>
                                     <Button type="submit" rounded="sm" color='white' bg="brand.900" colorScheme="brand" isLoading={isLoading}>Update</Button>
