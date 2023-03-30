@@ -9,20 +9,20 @@ import { Select, Input } from '@components/forms/fields/_index'
 import { Store } from '@store/context'
 import { UpdateCow } from '@services/http-client'
 
-export default function EditCow ({ onClose, cow }) {
-    const initialValues = { breed: cow.breed, entryDate: cow.entryDate }
+export default function EditCow ({ onClose, data }) {
+    const initialValues = { breed: data.breed, entryDate: data.entryDate }
     const [error, setError] = useState(false)
     const [isLoading, setLoading] = useState(false)
     const [state, dispatch] = useContext(Store)
     const handelSubmit = async (values) => {
         try {
             setLoading(true)
-            const { data } = await UpdateCow(state.auth.accessToken, cow.id, values)
+            const response = await UpdateCow(state.auth.accessToken, data.id, values)
             const cows = state.cows.map(item => {
-                if (item.id !== cow.id) {
+                if (item.id !== data.id) {
                     return item
                 } else {
-                    return data.cow
+                    return response.data.cow
                 }
             })
             dispatch({ type: 'UPDATE_COW', payload: cows })
@@ -31,6 +31,7 @@ export default function EditCow ({ onClose, cow }) {
             setError('Error when try to Update Cow')
             console.log('http error: ', error.response)
         } finally {
+            console.log('state: ', state.milks)
             setLoading(false)
         }
     }
@@ -47,12 +48,12 @@ export default function EditCow ({ onClose, cow }) {
                     () => {
                         return (
                             <Form>
-                                <Select value={cow.breed} label="Cow Breed" name="breed">
+                                <Select value={data.breed} label="Cow Breed" name="breed">
                                     <option value="" selected disabled>Select Cow Breed</option>
                                     <option value="holstein">Holstein</option>
                                     <option value="montbliard">Montbliard</option>
                                 </Select>
-                                <Input value={cow.entryDate} label="Entry Date" name="entryDate" type="date" />
+                                <Input value={data.entryDate} label="Entry Date" name="entryDate" type="date" />
                                 <HStack justifyContent="flex-end" mt="2">
                                     <Button px="5" rounded="sm" colorScheme="brand" variant="outline" fontWeight="medium" onClick={onClose}>Close</Button>
                                     <Button type="submit" rounded="sm" color='white' bg="brand.900" colorScheme="brand" isLoading={isLoading}>Update</Button>
@@ -68,5 +69,5 @@ export default function EditCow ({ onClose, cow }) {
 
 EditCow.propTypes = {
     onClose: PropTypes.func.isRequired,
-    cow: PropTypes.object.isRequired
+    data: PropTypes.object.isRequired
 }

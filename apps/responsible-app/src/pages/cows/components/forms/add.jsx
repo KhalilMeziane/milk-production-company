@@ -8,7 +8,7 @@ import * as yup from 'yup'
 import FormCustom from '@components/forms/form'
 import { Select, Input } from '@components/forms/fields/_index'
 import { Store } from '@store/context'
-import { CreateCow } from '../../../../services/http-client'
+import { CreateCow } from '@services/http-client'
 
 const initialValues = { breed: '', entryDate: '' }
 const validationSchema = yup.object().shape({

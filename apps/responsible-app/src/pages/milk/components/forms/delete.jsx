@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState, useContext } from 'react'
 
 import PropTypes from 'prop-types'
 import { HStack, Alert, Text, Button, AlertTitle, AlertDescription } from '@chakra-ui/react'
@@ -7,12 +7,31 @@ import * as yup from 'yup'
 
 import FormCustom from '@components/forms/form'
 import { Input } from '@components/forms/fields/_index'
+import { Store } from '@store/context'
+import { DeleteMilk as DeleteMilkCall } from '@services/http-client'
 
-export default function DeleteCow ({ onClose }) {
-    const initialValues = { day: '' }
+export default function DeleteMilk ({ onClose, data }) {
+    const initialValues = { entryDate: data.entryDate }
     const validationSchema = yup.object().shape({
-        day: yup.string().oneOf(['2023-03-29'], 'Day Not Match').required('Day is required')
+        entryDate: yup.string().oneOf([data.entryDate], 'Date Not Match').required('Entry Date is required')
     })
+    const [error, setError] = useState(false)
+    const [isLoading, setLoading] = useState(false)
+    const [state, dispatch] = useContext(Store)
+    const handelSubmit = async () => {
+        try {
+            setLoading(true)
+            await DeleteMilkCall(state.auth.accessToken, data.id)
+            const filteredMilks = state.milks.filter(item => item.id !== data.id)
+            dispatch({ type: 'DELETE_MILK', payload: filteredMilks })
+            onClose()
+        } catch (error) {
+            setError('Error when try to Delete Milk')
+            console.log('http error: ', error.response)
+        } finally {
+            setLoading(false)
+        }
+    }
 
     return (
         <>
@@ -23,21 +42,25 @@ export default function DeleteCow ({ onClose }) {
                 <AlertTitle>Warning:</AlertTitle>
                 <AlertDescription>This action is not reversible. Please be certain.</AlertDescription>
             </Alert>
+            {
+                error && <Text textAlign={'center'} textTransform={'capitalize'} py={3} px={2} color='red.500' rounded='sm' bg={'red.50'} mb='4'>{error}</Text>
+            }
             <FormCustom
                 initialValues={initialValues}
                 validationSchema={validationSchema}
+                handelSubmit={handelSubmit}
             >
                 {
                     () => {
                         return (
                             <Form>
                                 <Text color="gray.900" fontSize="md" mb="1">
-                                    Enter the Day <Text display='inline' fontWeight="semibold">2023-03-29</Text> to continue:
+                                    Enter the Day <Text display='inline' fontWeight="semibold">{data.entryDate}</Text> to continue:
                                 </Text>
-                                <Input name="day" placeholder="2023-03-29" />
+                                <Input name="entryDate" placeholder={data.entryDate} />
                                 <HStack justifyContent="flex-end" mt="2">
                                     <Button px="5" rounded="sm" colorScheme="red" variant="outline" fontWeight="medium" onClick={onClose}>Close</Button>
-                                    <Button type="submit" bg="red.500" px="5" rounded="sm" colorScheme="red" fontWeight="medium">Delete</Button>
+                                    <Button type="submit" bg="red.500" px="5" rounded="sm" colorScheme="red" fontWeight="medium" isLoading={isLoading}>Delete</Button>
                                 </HStack>
                             </Form>
                         )
@@ -48,6 +71,7 @@ export default function DeleteCow ({ onClose }) {
     )
 }
 
-DeleteCow.propTypes = {
-    onClose: PropTypes.func.isRequired
+DeleteMilk.propTypes = {
+    onClose: PropTypes.func.isRequired,
+    data: PropTypes.object.isRequired
 }

@@ -10,10 +10,10 @@ import { Input } from '@components/forms/fields/_index'
 import { Store } from '@store/context'
 import { DeleteCow as DeleteCowCall } from '@services/http-client'
 
-export default function DeleteCow ({ onClose, cow }) {
+export default function DeleteCow ({ onClose, data }) {
     const initialValues = { id: '' }
     const validationSchema = yup.object().shape({
-        id: yup.string().oneOf([cow.id], 'Cow Id Not Match').required('Cow ID is required')
+        id: yup.string().oneOf([data.id], 'Cow Id Not Match').required('Cow ID is required')
     })
     const [error, setError] = useState(false)
     const [isLoading, setLoading] = useState(false)
@@ -21,8 +21,8 @@ export default function DeleteCow ({ onClose, cow }) {
     const handelSubmit = async () => {
         try {
             setLoading(true)
-            await DeleteCowCall(state.auth.accessToken, cow.id)
-            const filteredCows = state.cows.filter(item => item.id !== cow.id)
+            await DeleteCowCall(state.auth.accessToken, data.id)
+            const filteredCows = state.cows.filter(item => item.id !== data.id)
             dispatch({ type: 'DELETE_COW', payload: filteredCows })
             onClose()
         } catch (error) {
@@ -54,9 +54,9 @@ export default function DeleteCow ({ onClose, cow }) {
                         return (
                             <Form>
                                 <Text color="gray.900" fontSize="md" mb="1">
-                                    Enter the Cow Id <Text display='inline' fontWeight="semibold">{cow.id}</Text> to continue:
+                                    Enter the Cow Id <Text display='inline' fontWeight="semibold">{data.id}</Text> to continue:
                                 </Text>
-                                <Input name="id" placeholder={cow.id} />
+                                <Input name="id" placeholder={data.id} />
                                 <HStack justifyContent="flex-end" mt="2">
                                     <Button px="5" rounded="sm" colorScheme="red" variant="outline" fontWeight="medium" onClick={onClose}>Close</Button>
                                     <Button type="submit" bg="red.500" px="5" rounded="sm" colorScheme="red" fontWeight="medium" isLoading={isLoading}>Delete</Button>
@@ -72,5 +72,5 @@ export default function DeleteCow ({ onClose, cow }) {
 
 DeleteCow.propTypes = {
     onClose: PropTypes.func.isRequired,
-    cow: PropTypes.object.isRequired
+    data: PropTypes.object.isRequired
 }

@@ -47,7 +47,7 @@ const tableHeadColumns = [
     { Header: 'breed', accessor: 'breed' },
     { Header: 'entryDate', accessor: 'entryDate' },
     { Header: 'addedBy', accessor: 'addedBy' },
-    { Header: 'action', accessor: 'action', Cell: ({ row }) => <Menu cow={row.original} menuList={MenuList}><MenuButton><Icon fontSize={'20'} as={BiDotsVerticalRounded} /></MenuButton></Menu> }
+    { Header: 'action', accessor: 'action', Cell: ({ row }) => <Menu data={row.original} menuList={MenuList}><MenuButton><Icon fontSize={'20'} as={BiDotsVerticalRounded} /></MenuButton></Menu> }
 ]
 
 export default function Cows () {

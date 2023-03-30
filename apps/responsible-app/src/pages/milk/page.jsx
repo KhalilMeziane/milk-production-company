@@ -1,4 +1,5 @@
-import React from 'react'
+/* eslint-disable react/prop-types */
+import React, { useEffect, useContext } from 'react'
 
 import { MenuButton, Icon } from '@chakra-ui/react'
 import { MdDeleteOutline } from 'react-icons/md'
@@ -9,6 +10,8 @@ import { Brand } from '@config/constants'
 import { Menu, Layout, Head, Table } from '@components/_index'
 import { AddSize } from './components/blocks'
 import { DeleteSize, EditSize } from './components/forms/_index'
+import { Store } from '@store/context'
+import { GetMilks } from '@services/http-client'
 
 const MenuList = [
     {
@@ -29,45 +32,29 @@ const MenuList = [
 const tableHeadColumns = [
     { Header: 'id', accessor: 'id' },
     { Header: 'size', accessor: 'size' },
-    { Header: 'date', accessor: 'date' },
+    { Header: 'entryDate', accessor: 'entryDate' },
     { Header: 'addedBy', accessor: 'addedBy' },
-    { Header: 'action', accessor: 'action', Cell: (props) => <Menu data={props} menuList={MenuList}><MenuButton><Icon fontSize={'20'} as={BiDotsVerticalRounded} /></MenuButton></Menu> }
-]
-
-const data = [
-    {
-        id: 123,
-        size: 45,
-        date: '2023-03-28',
-        addedBy: 'khalil meziane'
-    },
-    {
-        id: 234,
-        size: 45,
-        date: '2023-03-28',
-        addedBy: 'khalil meziane'
-    },
-    {
-        id: 433,
-        size: 45,
-        date: '2023-03-28',
-        addedBy: 'ahmed'
-    },
-    {
-        id: 466,
-        size: 45,
-        date: '2023-03-28',
-        addedBy: 'khalil meziane'
-    },
-    {
-        id: 477,
-        size: 45,
-        date: '2023-03-28',
-        addedBy: 'ahmed'
-    }
+    { Header: 'action', accessor: 'action', Cell: ({ row }) => <Menu data={row.original} menuList={MenuList}><MenuButton><Icon fontSize={'20'} as={BiDotsVerticalRounded} /></MenuButton></Menu> }
 ]
 
 export default function Milk () {
+    const [state, dispatch] = useContext(Store)
+    const controller = new AbortController()
+    const fetchMilks = async () => {
+        try {
+            const { data } = await GetMilks(state.auth.accessToken)
+            dispatch({ type: 'GET_MILKS', payload: data.milks })
+        } catch (error) {
+            console.log('error: ', error.response)
+        }
+    }
+
+    useEffect(() => {
+        fetchMilks()
+        return () => {
+            controller.abort()
+        }
+    }, [])
     return (
         <>
             <Head>
@@ -77,7 +64,7 @@ export default function Milk () {
                 <Table
                     title='Daily Milk'
                     columns={tableHeadColumns}
-                    data={data}
+                    data={state.milks}
                     mb={'4'}
                     h={'full'}
                     overflowX="auto"
