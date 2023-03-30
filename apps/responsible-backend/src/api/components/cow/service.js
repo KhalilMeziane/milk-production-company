@@ -20,10 +20,10 @@ exports.createCow = ({ addedBy, breed, entryDate }) => {
             fs.writeFile(dbUri, JSON.stringify({ ...data }), 'utf8', (err) => {
                 if (err) throw err
             })
-            resolve(cow)
+            return resolve(cow)
         } catch (error) {
             console.log('S error: ', error)
-            reject(createError.InternalServerError())
+            return reject(createError.InternalServerError())
         }
     })
 }
@@ -34,7 +34,11 @@ exports.updateCow = ({ id, body }) => {
             const db = fs.readFileSync(dbUri)
             const data = JSON.parse(db)
             const { cows } = data
-            const newCows = cows.map(cow => {
+            const targetCow = cows.find(cow => cow.id === id)
+            if (!targetCow) {
+                return reject(createError.NotFound())
+            }
+            const cowsList = cows.map(cow => {
                 if (cow.id !== id) {
                     return cow
                 } else {
@@ -44,13 +48,13 @@ exports.updateCow = ({ id, body }) => {
                     }
                 }
             })
-            fs.writeFile(dbUri, JSON.stringify({ ...data, cows: newCows }), 'utf8', (err) => {
+            fs.writeFile(dbUri, JSON.stringify({ ...data, cows: cowsList }), 'utf8', (err) => {
                 if (err) throw err
             })
-            resolve(newCows.find(cow => cow.id === id))
+            return resolve(cowsList.find(cow => cow.id === id))
         } catch (error) {
             console.log('S error: ', error)
-            reject(createError.InternalServerError())
+            return reject(createError.InternalServerError())
         }
     })
 }
@@ -61,14 +65,18 @@ exports.deleteCow = (id) => {
             const db = fs.readFileSync(dbUri)
             const data = JSON.parse(db)
             const { cows } = data
+            const targetCow = cows.find(cow => cow.id === id)
+            if (!targetCow) {
+                return reject(createError.NotFound())
+            }
             const filteredCows = cows.filter(cow => cow.id !== id)
             fs.writeFile(dbUri, JSON.stringify({ ...data, cows: filteredCows }), 'utf8', (err) => {
                 if (err) throw err
             })
-            resolve()
+            return resolve()
         } catch (error) {
             console.log('S error: ', error)
-            reject(createError.InternalServerError())
+            return reject(createError.InternalServerError())
         }
     })
 }
@@ -79,10 +87,10 @@ exports.getCows = () => {
             const db = fs.readFileSync(dbUri)
             const data = JSON.parse(db)
             const { cows } = data
-            resolve(cows)
+            return resolve(cows)
         } catch (error) {
             console.log('S error: ', error)
-            reject(createError.InternalServerError())
+            return reject(createError.InternalServerError())
         }
     })
 }
