@@ -2,7 +2,8 @@ const yup = require('yup')
 const { createCow, updateCow, deleteCow, getCows } = require('./service')
 
 const cowSchema = yup.object({
-    breed: yup.string().min(6).max(255).required('breed field is required')
+    breed: yup.string().oneOf(['holstein', 'montbliard'], 'Invalid option selected').required('breed is required'),
+    entryDate: yup.date().required('entry Date is required')
 })
 exports.createCow = async (req, res, next) => {
     const { breed, entryDate } = req.body
@@ -22,7 +23,8 @@ exports.createCow = async (req, res, next) => {
 }
 
 const updateCowSchema = yup.object({
-    breed: yup.string().min(6).max(255).required('breed field is required')
+    breed: yup.string().oneOf(['holstein', 'montbliard'], 'Invalid option selected').required('breed is required'),
+    entryDate: yup.date().required('entry Date is required')
 })
 exports.updateCow = async (req, res, next) => {
     const { breed, entryDate } = req.body
