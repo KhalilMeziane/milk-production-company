@@ -1,6 +1,6 @@
 import axios from 'axios'
 import setAuthHeader from './set-auth-header'
-import { LOGIN, LOGOUT, REFRESH, COWS } from './end-pointes'
+import { LOGIN, LOGOUT, REFRESH, COWS, MILKS } from './end-pointes'
 
 export const Login = (body) => {
     return axios.post(LOGIN, body)
@@ -33,4 +33,24 @@ export const DeleteCow = (accessToken, id) => {
 export const UpdateCow = (accessToken, id, body) => {
     setAuthHeader(accessToken)
     return axios.patch(`${COWS}/${id}`, body)
+}
+
+export const GetMilks = (accessToken) => {
+    setAuthHeader(accessToken)
+    return axios.get(MILKS)
+}
+
+export const CreateMilk = (accessToken, body) => {
+    setAuthHeader(accessToken)
+    return axios.post(MILKS, body)
+}
+
+export const DeleteMilk = (accessToken, id) => {
+    setAuthHeader(accessToken)
+    return axios.delete(`${MILKS}/${id}`)
+}
+
+export const UpdateMilk = (accessToken, id, body) => {
+    setAuthHeader(accessToken)
+    return axios.patch(`${MILKS}/${id}`, body)
 }

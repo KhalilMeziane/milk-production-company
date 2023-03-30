@@ -7,3 +7,6 @@ export const REFRESH = `${BASE_URL}/auth/refresh`
 
 // cows
 export const COWS = `${BASE_URL}/cows`
+
+// milks
+export const MILKS = `${BASE_URL}/milks`
