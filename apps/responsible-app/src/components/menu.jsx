@@ -5,7 +5,7 @@ import { Menu, MenuItem, MenuList, Icon, Text, HStack } from '@chakra-ui/react'
 
 import Modal from './modal'
 
-export default function MenuComponent ({ menuList, children }) {
+export default function MenuComponent ({ menuList, cow, children }) {
     return (
         <>
             <Menu>
@@ -19,6 +19,10 @@ export default function MenuComponent ({ menuList, children }) {
                 >
                     {
                         menuList.map(({ title, text, icon, body }, index) => {
+                            const [bodyR] = React.Children.toArray(body)
+                            const Body = (props) => {
+                                return React.cloneElement(bodyR, { ...props, cow })
+                            }
                             return (
                                 <MenuItem key={index}>
                                     <Modal
@@ -31,7 +35,7 @@ export default function MenuComponent ({ menuList, children }) {
                                             <Icon as={icon} />
                                             <Text w="full">{text}</Text>
                                         </HStack>
-                                        {body}
+                                        <Body />
                                     </Modal>
                                 </MenuItem>
                             )
@@ -45,5 +49,6 @@ export default function MenuComponent ({ menuList, children }) {
 
 MenuComponent.propTypes = {
     menuList: PropTypes.array.isRequired,
-    children: PropTypes.node.isRequired
+    children: PropTypes.node.isRequired,
+    cow: PropTypes.object.isRequired
 }

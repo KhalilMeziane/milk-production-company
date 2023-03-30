@@ -16,9 +16,10 @@ export default function ModalCustom ({ title, children, ...props }) {
     const CButton = () => {
         return React.cloneElement(childrenArray[0], { onClick: onOpen })
     }
-    const Body = () => {
-        return React.cloneElement(childrenArray[1], { onClose })
+    const Body = (props) => {
+        return React.cloneElement(childrenArray[1], { ...props, onClose })
     }
+
     return (
         <>
             <CButton />
