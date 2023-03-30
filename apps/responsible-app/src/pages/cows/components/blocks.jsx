@@ -30,7 +30,7 @@ export const Filter = () => {
     )
 }
 
-export const ViewCow = ({ onClose }) => {
+export const ViewCow = ({ onClose, cow }) => {
     return (
         <>
             <VStack alignItems="flex-start" w="full" py="2">
@@ -45,19 +45,19 @@ export const ViewCow = ({ onClose }) => {
                         <Text>Cow Id:</Text>
                     </GridItem>
                     <GridItem colSpan={2}>
-                        <Text>564-45453-4543</Text>
+                        <Text>{cow.id}</Text>
                     </GridItem>
                     <GridItem colSpan={2}>
                         <Text>Entry Date:</Text>
                     </GridItem>
                     <GridItem colSpan={2}>
-                        <Text>2023-03-29</Text>
+                        <Text>{cow.entryDate}</Text>
                     </GridItem>
                     <GridItem colSpan={2}>
                         <Text>Added By:</Text>
                     </GridItem>
                     <GridItem colSpan={2}>
-                        <Text>khalil meziane</Text>
+                        <Text>{cow.addedBy}</Text>
                     </GridItem>
                 </Grid>
             </VStack>
@@ -104,5 +104,6 @@ export const ViewCow = ({ onClose }) => {
 }
 
 ViewCow.propTypes = {
-    onClose: PropTypes.func.isRequired
+    onClose: PropTypes.func.isRequired,
+    cow: PropTypes.object.isRequired
 }

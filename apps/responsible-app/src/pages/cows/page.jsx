@@ -1,4 +1,5 @@
-import React from 'react'
+/* eslint-disable react/prop-types */
+import React, { useEffect, useContext } from 'react'
 
 import { MenuButton, Icon } from '@chakra-ui/react'
 import { MdOutlineMedicalServices, MdOutlineDeleteOutline } from 'react-icons/md'
@@ -10,6 +11,8 @@ import { Brand } from '@config/constants'
 import { Menu, Layout, Head, Table } from '@components/_index'
 import { AddCow, Filter, ViewCow } from './components/blocks'
 import { DeleteCow, EditCow, Medical } from './components/forms/_index'
+import { GetCows } from '@services/http-client'
+import { Store } from '@store/context'
 
 const MenuList = [
     {
@@ -44,55 +47,27 @@ const tableHeadColumns = [
     { Header: 'breed', accessor: 'breed' },
     { Header: 'entryDate', accessor: 'entryDate' },
     { Header: 'addedBy', accessor: 'addedBy' },
-    { Header: 'action', accessor: 'action', Cell: (props) => <Menu data={props} menuList={MenuList}><MenuButton><Icon fontSize={'20'} as={BiDotsVerticalRounded} /></MenuButton></Menu> }
-]
-
-const data = [
-    {
-        id: 457,
-        breed: 'Holstein',
-        entryDate: '2023-03-28',
-        addedBy: 'khalil meziane'
-    },
-    {
-        id: 458,
-        breed: 'montbliard',
-        entryDate: '2023-03-28',
-        addedBy: 'khalil meziane'
-    },
-    {
-        id: 345,
-        breed: 'Holstein',
-        entryDate: '2023-03-28',
-        addedBy: 'ahmed meziane'
-    },
-    {
-        id: 123,
-        breed: 'Holstein',
-        entryDate: '2023-03-28',
-        addedBy: 'khalil meziane'
-    },
-    {
-        id: 631,
-        breed: 'montbliard',
-        entryDate: '2023-03-28',
-        addedBy: 'khalil meziane'
-    },
-    {
-        id: 402,
-        breed: 'Holstein',
-        entryDate: '2023-03-28',
-        addedBy: 'ahmed'
-    },
-    {
-        id: 905,
-        breed: 'montbliard',
-        entryDate: '2023-03-28',
-        addedBy: 'zino meziane'
-    }
+    { Header: 'action', accessor: 'action', Cell: ({ row }) => <Menu cow={row.original} menuList={MenuList}><MenuButton><Icon fontSize={'20'} as={BiDotsVerticalRounded} /></MenuButton></Menu> }
 ]
 
 export default function Cows () {
+    const [state, dispatch] = useContext(Store)
+    const controller = new AbortController()
+    const fetchCows = async () => {
+        try {
+            const { data } = await GetCows(state.auth.accessToken)
+            dispatch({ type: 'GET_COWS', payload: data.cows })
+        } catch (error) {
+            console.log('error: ', error.response)
+        }
+    }
+
+    useEffect(() => {
+        fetchCows()
+        return () => {
+            controller.abort()
+        }
+    }, [])
     return (
         <>
             <Head>
@@ -102,7 +77,7 @@ export default function Cows () {
                 <Table
                     title='Cows'
                     columns={tableHeadColumns}
-                    data={data}
+                    data={state.cows}
                     mb={'4'}
                     h={'full'}
                     overflowX="auto"
