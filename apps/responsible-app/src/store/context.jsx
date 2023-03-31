@@ -4,7 +4,7 @@ import React, { createContext, useReducer, useMemo } from 'react'
 import useCombinedReducers from 'use-combined-reducers'
 import Cookies from 'js-cookie'
 
-import { AuthReducer, CowReducer, MilkReducer } from './reducers/_index'
+import { AuthReducer, CowReducer, MilkReducer, ResponsibleReducer } from './reducers/_index'
 
 export const Store = createContext()
 
@@ -19,14 +19,16 @@ const getUserFromCookies = () => {
 const initialState = {
     auth: getUserFromCookies(),
     cows: [],
-    milks: []
+    milks: [],
+    responsibles: []
 }
 
 export function ContextProvider ({ children }) {
     const [state, dispatch] = useCombinedReducers({
         auth: useReducer(AuthReducer, initialState.auth),
         cows: useReducer(CowReducer, initialState.cows),
-        milks: useReducer(MilkReducer, initialState.milks)
+        milks: useReducer(MilkReducer, initialState.milks),
+        responsibles: useReducer(ResponsibleReducer, initialState.responsibles)
     })
     const store = useMemo(() => [state, dispatch], [state])
 

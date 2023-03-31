@@ -1,7 +1,8 @@
 import axios from 'axios'
 import setAuthHeader from './set-auth-header'
-import { LOGIN, LOGOUT, REFRESH, COWS, MILKS } from './end-pointes'
+import { LOGIN, LOGOUT, REFRESH, COWS, MILKS, RESPONSIBLE } from './end-pointes'
 
+// AUTH Calls
 export const Login = (body) => {
     return axios.post(LOGIN, body)
 }
@@ -15,6 +16,7 @@ export const Refresh = (body) => {
     return axios.post(REFRESH, body)
 }
 
+// COWS Calls
 export const GetCows = (accessToken) => {
     setAuthHeader(accessToken)
     return axios.get(COWS)
@@ -35,6 +37,7 @@ export const UpdateCow = (accessToken, id, body) => {
     return axios.patch(`${COWS}/${id}`, body)
 }
 
+// MILKS Calls
 export const GetMilks = (accessToken) => {
     setAuthHeader(accessToken)
     return axios.get(MILKS)
@@ -53,4 +56,15 @@ export const DeleteMilk = (accessToken, id) => {
 export const UpdateMilk = (accessToken, id, body) => {
     setAuthHeader(accessToken)
     return axios.patch(`${MILKS}/${id}`, body)
+}
+
+// RESPONSIBLE Calls
+export const CreateResponsible = (accessToken, body) => {
+    setAuthHeader(accessToken)
+    return axios.post(RESPONSIBLE, body)
+}
+
+export const DeleteResponsible = (accessToken, id) => {
+    setAuthHeader(accessToken)
+    return axios.delete(`${RESPONSIBLE}/${id}`)
 }

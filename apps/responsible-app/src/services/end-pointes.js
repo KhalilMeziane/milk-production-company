@@ -10,3 +10,6 @@ export const COWS = `${BASE_URL}/cows`
 
 // milks
 export const MILKS = `${BASE_URL}/milks`
+
+// users
+export const RESPONSIBLE = `${BASE_URL}/responsibles`
