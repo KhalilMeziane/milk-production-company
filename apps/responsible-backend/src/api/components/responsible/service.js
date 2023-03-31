@@ -6,7 +6,7 @@ const { hashPassword } = require('./utils')
 
 const dbUri = path.join(__dirname, '/../../../db', 'db.json')
 
-exports.createUser = async ({ email, password, fullName, role }) => {
+exports.createResponsible = async ({ email, password, fullName, role }) => {
     return new Promise((resolve, reject) => {
         const db = fs.readFileSync(dbUri)
         const data = JSON.parse(db)
@@ -38,7 +38,7 @@ exports.createUser = async ({ email, password, fullName, role }) => {
     })
 }
 
-exports.deleteUser = async ({ id }) => {
+exports.deleteResponsible = async ({ id }) => {
     return new Promise((resolve, reject) => {
         const db = fs.readFileSync(dbUri)
         const data = JSON.parse(db)
