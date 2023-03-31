@@ -70,7 +70,7 @@ function PublicRoute () {
 function AdminRoute () {
     const [state] = useContext(Store)
     const { auth } = state
-    if (auth?.admin !== 'admin') {
+    if (auth?.role !== 'admin') {
         return <Navigate to="/404" />
     }
     return <Outlet />
