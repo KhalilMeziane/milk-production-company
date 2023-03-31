@@ -26,6 +26,7 @@ export default function LoginForm () {
         try {
             setLoading(true)
             const { data } = await Login(values)
+            localStorage.setItem('auth', JSON.stringify(data))
             dispatch({ type: 'AUTH_LOGIN', payload: data })
             navigate('/cows')
         } catch (error) {

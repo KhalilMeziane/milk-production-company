@@ -2,22 +2,13 @@
 import React, { createContext, useReducer, useMemo } from 'react'
 
 import useCombinedReducers from 'use-combined-reducers'
-import Cookies from 'js-cookie'
 
 import { AuthReducer, CowReducer, MilkReducer, ResponsibleReducer } from './reducers/_index'
 
 export const Store = createContext()
 
-const getUserFromCookies = () => {
-    try {
-        return Cookies.get('auth') !== undefined ? JSON.parse(Cookies.get('auth')) : undefined
-    } catch (error) {
-        console.log(error)
-    }
-}
-
 const initialState = {
-    auth: getUserFromCookies(),
+    auth: JSON.parse(localStorage.getItem('auth')),
     cows: [],
     milks: [],
     responsibles: []

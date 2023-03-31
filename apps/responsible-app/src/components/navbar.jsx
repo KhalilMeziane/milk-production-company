@@ -16,14 +16,13 @@ import { Logout } from '@services/http-client'
 
 const MenuItems = [
     { name: 'Cows', path: '/cows', icon: TbReportAnalytics },
-    { name: 'Users', path: '/users', icon: FiUsers },
     { name: 'Milk', path: '/milk', icon: AiOutlineUser }
 ]
 
 export default function Navbar (props) {
     const navigate = useNavigate()
     const [state, dispatch] = useContext(Store)
-    const { accessToken } = state.auth
+    const { accessToken, role } = state.auth
     const handelSubmit = async () => {
         try {
             await Logout(accessToken)
@@ -77,6 +76,16 @@ export default function Navbar (props) {
                                     {name}
                                 </MenuItem>
                             ))}
+                            {
+                                role === 'admin' && <MenuItem
+                                    as={LinkRouter}
+                                    key={'Users'}
+                                    to='/users'
+                                    icon={<FiUsers />}
+                                >
+                                    Users
+                                </MenuItem>
+                            }
                             <Drawer title="Profile">
                                 <MenuItem icon={<AiOutlineUser />}>Profile</MenuItem>
                                 <Profile user={state.auth} />

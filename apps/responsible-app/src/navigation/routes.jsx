@@ -27,12 +27,17 @@ const routes = createBrowserRouter([
                 element: <Cows />
             },
             {
-                path: '/users',
-                element: <Users />
-            },
-            {
                 path: '/milk',
                 element: <Milk />
+            },
+            {
+                element: <AdminRoute />,
+                children: [
+                    {
+                        path: '/users',
+                        element: <Users />
+                    }
+                ]
             }
         ]
     }
@@ -58,6 +63,15 @@ function PublicRoute () {
     const { auth } = state
     if (auth?.accessToken) {
         return <Navigate to="/cows" />
+    }
+    return <Outlet />
+}
+
+function AdminRoute () {
+    const [state] = useContext(Store)
+    const { auth } = state
+    if (auth?.admin !== 'admin') {
+        return <Navigate to="/404" />
     }
     return <Outlet />
 }
