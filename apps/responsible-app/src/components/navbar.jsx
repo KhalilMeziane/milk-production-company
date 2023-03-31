@@ -6,7 +6,6 @@ import { FiChevronDown, FiUsers } from 'react-icons/fi'
 import { VscSignOut } from 'react-icons/vsc'
 import { AiOutlineUser } from 'react-icons/ai'
 import { TbReportAnalytics } from 'react-icons/tb'
-import Cookies from 'js-cookie'
 
 import Drawer from './drawer'
 import Profile from './profile'
@@ -28,7 +27,7 @@ export default function Navbar (props) {
             await Logout(accessToken)
             dispatch({ type: 'AUTH_LOGOUT' })
             navigate('/')
-            Cookies.remove('auth')
+            localStorage.removeItem('auth')
         } catch (error) {
             console.log('error: ', error.response)
         }
