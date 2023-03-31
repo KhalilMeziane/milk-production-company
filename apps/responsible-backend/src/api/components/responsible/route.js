@@ -1,9 +1,11 @@
 const router = require('express').Router()
-const { createResponsible, deleteResponsible } = require('./controller')
+const { createResponsible, deleteResponsible, getResponsibles } = require('./controller')
 const { verifyAuthorization, verifyIsAdmin } = require('../../middlewares/auth')
 
 router.post('/', verifyAuthorization, verifyIsAdmin, createResponsible)
 
-router.delete('/', verifyAuthorization, verifyIsAdmin, deleteResponsible)
+router.delete('/:id', verifyAuthorization, verifyIsAdmin, deleteResponsible)
+
+router.get('/', verifyAuthorization, verifyIsAdmin, getResponsibles)
 
 module.exports = router

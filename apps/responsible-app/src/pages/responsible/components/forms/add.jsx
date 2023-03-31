@@ -1,27 +1,50 @@
-import React from 'react'
+import React, { useState, useContext } from 'react'
 
 import PropTypes from 'prop-types'
-import { Button, HStack } from '@chakra-ui/react'
+import { Button, HStack, Text } from '@chakra-ui/react'
 import { Form } from 'formik'
 import * as yup from 'yup'
 
 import FormCustom from '@components/forms/form'
 import { Input, Select } from '@components/forms/fields/_index'
+import { Store } from '@store/context'
+import { CreateResponsible } from '@services/http-client'
 
 const initialValues = { fullName: '', email: '', password: '', role: '' }
 const validationSchema = yup.object().shape({
     email: yup.string().email('Invalid email').required('Email is required'),
-    password: yup.string().min(8, 'Minium 8 characters').max(30, 'Maximum 30 characters').required('Password is required'),
+    password: yup.string().min(6, 'Minium 6 characters').max(30, 'Maximum 30 characters').required('Password is required'),
     fullName: yup.string().min(6, 'Minium 8 characters').max(30, 'Maximum 30 characters').required('full Name is required'),
     role: yup.string().oneOf(['admin', 'moderator'], 'Invalid option selected').required('User Role is required')
 })
 
-export default function AddCow ({ onClose }) {
+export default function AddResponsible ({ onClose }) {
+    const [error, setError] = useState(false)
+    const [isLoading, setLoading] = useState(false)
+    const [state, dispatch] = useContext(Store)
+    const handelSubmit = async (values) => {
+        try {
+            setLoading(true)
+            const { data } = await CreateResponsible(state.auth.accessToken, values)
+            dispatch({ type: 'SET_RESPONSIBLE', payload: data.user })
+            onClose()
+        } catch (error) {
+            setError('Error when try to Add Responsible')
+            console.log('http error: ', error.response)
+        } finally {
+            console.log('state: ', state)
+            setLoading(false)
+        }
+    }
     return (
         <>
+            {
+                error && <Text textAlign={'center'} textTransform={'capitalize'} py={3} px={2} color='red.500' rounded='sm' bg={'red.50'} mb='4'>{error}</Text>
+            }
             <FormCustom
                 initialValues={initialValues}
                 validationSchema={validationSchema}
+                handelSubmit={handelSubmit}
             >
                 {
                     () => {
@@ -37,7 +60,7 @@ export default function AddCow ({ onClose }) {
                                 <Input label="Password" name="password" type="password" placeholder="password"/>
                                 <HStack justifyContent="flex-end" mt="2">
                                     <Button px="5" rounded="sm" colorScheme="brand" variant="outline" fontWeight="medium" onClick={onClose}>Close</Button>
-                                    <Button type="submit" rounded="sm" color='white' bg="brand.900" colorScheme="brand">Submit</Button>
+                                    <Button type="submit" rounded="sm" color='white' bg="brand.900" colorScheme="brand" isLoading={isLoading}>Submit</Button>
                                 </HStack>
                             </Form>
                         )
@@ -48,6 +71,6 @@ export default function AddCow ({ onClose }) {
     )
 }
 
-AddCow.propTypes = {
+AddResponsible.propTypes = {
     onClose: PropTypes.func.isRequired
 }

@@ -22,7 +22,8 @@ exports.createResponsible = async ({ email, password, fullName, role }) => {
                     fullName,
                     email,
                     password: hash,
-                    role
+                    role,
+                    createdAt: new Date().toISOString().split('T')[0]
                 }
                 data.users.push(newUser)
                 const { password, ...user } = newUser
@@ -52,5 +53,19 @@ exports.deleteResponsible = async ({ id }) => {
             if (err) throw err
         })
         return resolve()
+    })
+}
+
+exports.getResponsibles = async () => {
+    return new Promise((resolve, reject) => {
+        try {
+            const db = fs.readFileSync(dbUri)
+            const data = JSON.parse(db)
+            const { users } = data
+            return resolve(users)
+        } catch (error) {
+            console.log('S error: ', error)
+            return reject(createError.InternalServerError())
+        }
     })
 }

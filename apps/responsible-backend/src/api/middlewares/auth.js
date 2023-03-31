@@ -11,6 +11,7 @@ exports.verifyAuthorization = async (req, res, next) => {
     try {
         const user = await verifyAccessToken(accessToken)
         req.user = user
+        console.log('req.user: ', req.user)
         next()
     } catch (error) {
         return next(createError.Unauthorized())

@@ -64,6 +64,11 @@ export const CreateResponsible = (accessToken, body) => {
     return axios.post(RESPONSIBLE, body)
 }
 
+export const GetResponsibles = (accessToken) => {
+    setAuthHeader(accessToken)
+    return axios.get(RESPONSIBLE)
+}
+
 export const DeleteResponsible = (accessToken, id) => {
     setAuthHeader(accessToken)
     return axios.delete(`${RESPONSIBLE}/${id}`)

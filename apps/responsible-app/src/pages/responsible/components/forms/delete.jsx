@@ -8,12 +8,12 @@ import * as yup from 'yup'
 import FormCustom from '@components/forms/form'
 import { Input } from '@components/forms/fields/_index'
 import { Store } from '@store/context'
-import { DeleteMilk as DeleteMilkCall } from '@services/http-client'
+import { DeleteResponsible as DeleteResponsibleCall } from '@services/http-client'
 
-export default function DeleteMilk ({ onClose, data }) {
-    const initialValues = { entryDate: '' }
+export default function DeleteResponsible ({ onClose, data }) {
+    const initialValues = { email: '' }
     const validationSchema = yup.object().shape({
-        entryDate: yup.string().oneOf([data.entryDate], 'Date Not Match').required('Entry Date is required')
+        email: yup.string().email('Invalid email').oneOf([data.email], 'Email Not Match').required('Email is required')
     })
     const [error, setError] = useState(false)
     const [isLoading, setLoading] = useState(false)
@@ -21,12 +21,12 @@ export default function DeleteMilk ({ onClose, data }) {
     const handelSubmit = async () => {
         try {
             setLoading(true)
-            await DeleteMilkCall(state.auth.accessToken, data.id)
-            const filteredMilks = state.milks.filter(item => item.id !== data.id)
-            dispatch({ type: 'DELETE_MILK', payload: filteredMilks })
+            await DeleteResponsibleCall(state.auth.accessToken, data.id)
+            const filteredResponsibles = state.responsibles.filter(item => item.id !== data.id)
+            dispatch({ type: 'DELETE_RESPONSIBLE', payload: filteredResponsibles })
             onClose()
         } catch (error) {
-            setError('Error when try to Delete Milk')
+            setError('Error when try to Delete Responsible')
             console.log('http error: ', error.response)
         } finally {
             setLoading(false)
@@ -36,7 +36,7 @@ export default function DeleteMilk ({ onClose, data }) {
     return (
         <>
             <Text fontSize="md" textColor="gray.900">
-                This Day will be deleted, along with all of its data.
+                This user will be deleted, along with all of its data.
             </Text>
             <Alert status='warning' variant='subtle' my="3" >
                 <AlertTitle>Warning:</AlertTitle>
@@ -55,9 +55,9 @@ export default function DeleteMilk ({ onClose, data }) {
                         return (
                             <Form>
                                 <Text color="gray.900" fontSize="md" mb="1">
-                                    Enter the Day <Text display='inline' fontWeight="semibold">{data.entryDate}</Text> to continue:
+                                    Enter the user email <Text display='inline' fontWeight="semibold">{data.email}</Text> to continue:
                                 </Text>
-                                <Input name="entryDate" placeholder={data.entryDate} />
+                                <Input name="email" placeholder={data.email} />
                                 <HStack justifyContent="flex-end" mt="2">
                                     <Button px="5" rounded="sm" colorScheme="red" variant="outline" fontWeight="medium" onClick={onClose}>Close</Button>
                                     <Button type="submit" bg="red.500" px="5" rounded="sm" colorScheme="red" fontWeight="medium" isLoading={isLoading}>Delete</Button>
@@ -71,7 +71,7 @@ export default function DeleteMilk ({ onClose, data }) {
     )
 }
 
-DeleteMilk.propTypes = {
+DeleteResponsible.propTypes = {
     onClose: PropTypes.func.isRequired,
     data: PropTypes.object.isRequired
 }

@@ -11,6 +11,7 @@ exports.login = async ({ email, password }) => {
         const data = JSON.parse(db)
         const { users } = data
         const user = users.find(user => user.email === email)
+        console.log('user: ', user)
         if (!user) {
             reject(createError.BadRequest('Invalid email or password'))
         }
