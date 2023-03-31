@@ -8,6 +8,7 @@ import Login from '@pages/login/page'
 import Cows from '@pages/cows/page'
 import Users from '@pages//responsible/page'
 import Milk from '@pages/milk/page'
+import NotFound from '@pages/notFound/page'
 
 const routes = createBrowserRouter([
     {
@@ -40,12 +41,16 @@ const routes = createBrowserRouter([
                 ]
             }
         ]
+    },
+    {
+        path: '*',
+        element: <NotFound />
     }
 ])
 
 export default function Navigation () {
     return (
-        <RouterProvider router={routes}/>
+        <RouterProvider router={routes} />
     )
 }
 
@@ -71,7 +76,7 @@ function AdminRoute () {
     const [state] = useContext(Store)
     const { auth } = state
     if (auth?.role !== 'admin') {
-        return <Navigate to="/404" />
+        return <Navigate to='/404' />
     }
     return <Outlet />
 }

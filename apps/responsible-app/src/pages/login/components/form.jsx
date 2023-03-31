@@ -3,7 +3,7 @@ import React, { useContext, useState } from 'react'
 import { Form } from 'formik'
 import { Button, Text } from '@chakra-ui/react'
 import * as yup from 'yup'
-import { useNavigate } from 'react-router-dom'
+import { Navigate } from 'react-router-dom'
 
 import FormCustom from '@components/forms/form'
 import Input from '@components/forms/fields/input'
@@ -21,14 +21,13 @@ export default function LoginForm () {
     const [error, setError] = useState(false)
     const [isLoading, setLoading] = useState(false)
     const [, dispatch] = useContext(Store)
-    const navigate = useNavigate()
     const handelSubmit = async (values) => {
         try {
             setLoading(true)
             const { data } = await Login(values)
             localStorage.setItem('auth', JSON.stringify(data))
             dispatch({ type: 'AUTH_LOGIN', payload: data })
-            navigate('/cows')
+            return <Navigate to="/cows" replace={true} />
         } catch (error) {
             setError('Invalid email or password')
             console.log('http error: ', error.response)
