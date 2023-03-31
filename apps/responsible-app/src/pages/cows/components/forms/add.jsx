@@ -16,16 +16,14 @@ const validationSchema = yup.object().shape({
     entryDate: yup.date().required('entry Date is required')
 })
 
-export default function AddCow ({ onClose }) {
+export default function AddCow ({ onClose, data: motherCow }) {
     const [error, setError] = useState(false)
     const [isLoading, setLoading] = useState(false)
     const [state, dispatch] = useContext(Store)
     const handelSubmit = async (values) => {
-        console.log('values: ', values)
         try {
             setLoading(true)
-            const { data } = await CreateCow(state.auth.accessToken, values)
-            console.log('data: ', data)
+            const { data } = await CreateCow(state.auth.accessToken, { ...values, motherId: motherCow?.id })
             dispatch({ type: 'SET_COW', payload: data.cow })
             onClose()
         } catch (error) {
@@ -70,5 +68,6 @@ export default function AddCow ({ onClose }) {
 }
 
 AddCow.propTypes = {
-    onClose: PropTypes.func.isRequired
+    onClose: PropTypes.func.isRequired,
+    data: PropTypes.object
 }

@@ -30,7 +30,8 @@ export const Filter = () => {
     )
 }
 
-export const ViewCow = ({ onClose, cow }) => {
+export const ViewCow = ({ onClose, data }) => {
+    console.log('data: ', data)
     return (
         <>
             <VStack alignItems="flex-start" w="full" py="2">
@@ -45,19 +46,35 @@ export const ViewCow = ({ onClose, cow }) => {
                         <Text>Cow Id:</Text>
                     </GridItem>
                     <GridItem colSpan={2}>
-                        <Text>{cow.id}</Text>
+                        <Text>{data.id}</Text>
                     </GridItem>
                     <GridItem colSpan={2}>
                         <Text>Entry Date:</Text>
                     </GridItem>
                     <GridItem colSpan={2}>
-                        <Text>{cow.entryDate}</Text>
+                        <Text>{data.entryDate}</Text>
                     </GridItem>
+                    <GridItem colSpan={2}>
+                        <Text>Origin:</Text>
+                    </GridItem>
+                    <GridItem colSpan={2}>
+                        <Text>{data.origin}</Text>
+                    </GridItem>
+                    {
+                        data.motherId && <>
+                            <GridItem colSpan={2}>
+                                <Text>Mother:</Text>
+                            </GridItem>
+                            <GridItem colSpan={2}>
+                                <Text>{data.motherId}</Text>
+                            </GridItem>
+                        </>
+                    }
                     <GridItem colSpan={2}>
                         <Text>Added By:</Text>
                     </GridItem>
                     <GridItem colSpan={2}>
-                        <Text>{cow.addedBy}</Text>
+                        <Text>{data.addedBy}</Text>
                     </GridItem>
                 </Grid>
             </VStack>
@@ -105,5 +122,5 @@ export const ViewCow = ({ onClose, cow }) => {
 
 ViewCow.propTypes = {
     onClose: PropTypes.func.isRequired,
-    cow: PropTypes.object.isRequired
+    data: PropTypes.object.isRequired
 }

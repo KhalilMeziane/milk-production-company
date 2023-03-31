@@ -6,10 +6,10 @@ const cowSchema = yup.object({
     entryDate: yup.date().required('entry Date is required')
 })
 exports.createCow = async (req, res, next) => {
-    const { breed, entryDate } = req.body
+    const { breed, entryDate, motherId } = req.body
     try {
         await cowSchema.validate({ breed, entryDate }, { abortEarly: false })
-        const cow = await createCow({ addedBy: req.user.fullName, breed, entryDate })
+        const cow = await createCow({ addedBy: req.user.fullName, breed, entryDate, motherId })
         res.status(201).json({ cow })
     } catch (error) {
         if (error.errors) {

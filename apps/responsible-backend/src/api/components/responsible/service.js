@@ -2,7 +2,7 @@ const fs = require('fs')
 const path = require('path')
 const createError = require('http-errors')
 const { v4: uuidv4 } = require('uuid')
-const { hashPassword } = require('./utils')
+const { hashPassword } = require('../auth/utils')
 
 const dbUri = path.join(__dirname, '/../../../db', 'db.json')
 

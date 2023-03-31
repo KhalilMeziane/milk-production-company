@@ -5,12 +5,14 @@ const { v4: uuidv4 } = require('uuid')
 
 const dbUri = path.join(__dirname, '/../../../db', 'db.json')
 
-exports.createCow = ({ addedBy, breed, entryDate }) => {
+exports.createCow = ({ addedBy, breed, entryDate, motherId }) => {
     const cow = {
         id: uuidv4(),
         addedBy,
         breed,
-        entryDate
+        entryDate,
+        motherId,
+        origin: motherId ? 'farm' : 'importer'
     }
     return new Promise((resolve, reject) => {
         try {

@@ -6,11 +6,12 @@ import { MdOutlineMedicalServices, MdOutlineDeleteOutline } from 'react-icons/md
 import { BiDotsVerticalRounded } from 'react-icons/bi'
 import { FiEdit } from 'react-icons/fi'
 import { BsInfoSquare } from 'react-icons/bs'
+import { GrAddCircle } from 'react-icons/gr'
 
 import { Brand } from '@config/constants'
 import { Menu, Layout, Head, Table } from '@components/_index'
 import { AddCow, Filter, ViewCow } from './components/blocks'
-import { DeleteCow, EditCow, Medical } from './components/forms/_index'
+import { DeleteCow, EditCow, Medical, AddCow as AddCowForm } from './components/forms/_index'
 import { GetCows } from '@services/http-client'
 import { Store } from '@store/context'
 
@@ -26,6 +27,12 @@ const MenuList = [
         text: 'Disease',
         icon: MdOutlineMedicalServices,
         body: <Medical />
+    },
+    {
+        title: 'Add Calf Birth',
+        text: 'Add birth',
+        icon: GrAddCircle,
+        body: <AddCowForm />
     },
     {
         title: 'Edit Cow',
@@ -45,6 +52,7 @@ const MenuList = [
 const tableHeadColumns = [
     { Header: 'id', accessor: 'id' },
     { Header: 'breed', accessor: 'breed' },
+    { Header: 'origin', accessor: 'origin' },
     { Header: 'entryDate', accessor: 'entryDate' },
     { Header: 'addedBy', accessor: 'addedBy' },
     { Header: 'action', accessor: 'action', Cell: ({ row }) => <Menu data={row.original} menuList={MenuList}><MenuButton><Icon fontSize={'20'} as={BiDotsVerticalRounded} /></MenuButton></Menu> }
