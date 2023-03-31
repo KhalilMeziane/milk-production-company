@@ -31,7 +31,6 @@ export const Filter = () => {
 }
 
 export const ViewCow = ({ onClose, data }) => {
-    console.log('data: ', data)
     return (
         <>
             <VStack alignItems="flex-start" w="full" py="2">

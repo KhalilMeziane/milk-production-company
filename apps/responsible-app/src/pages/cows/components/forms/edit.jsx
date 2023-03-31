@@ -31,7 +31,6 @@ export default function EditCow ({ onClose, data }) {
             setError('Error when try to Update Cow')
             console.log('http error: ', error.response)
         } finally {
-            console.log('state: ', state.milks)
             setLoading(false)
         }
     }

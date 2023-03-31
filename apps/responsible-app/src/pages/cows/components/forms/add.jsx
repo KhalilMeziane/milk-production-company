@@ -30,7 +30,6 @@ export default function AddCow ({ onClose, data: motherCow }) {
             setError('Error when try to create cow')
             console.log('http error: ', error.response)
         } finally {
-            console.log('state: ', state)
             setLoading(false)
         }
     }

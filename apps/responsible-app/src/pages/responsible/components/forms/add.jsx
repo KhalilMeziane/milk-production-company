@@ -32,7 +32,6 @@ export default function AddResponsible ({ onClose }) {
             setError('Error when try to Add Responsible')
             console.log('http error: ', error.response)
         } finally {
-            console.log('state: ', state)
             setLoading(false)
         }
     }
