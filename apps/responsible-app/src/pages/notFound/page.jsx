@@ -1,7 +1,7 @@
 import React from 'react'
 
 import { Flex, Stack, Heading, Button, Text } from '@chakra-ui/react'
-import { useNavigate, useLocation } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 
 import Head from '@components/head'
 import { Brand } from '@config/constants'

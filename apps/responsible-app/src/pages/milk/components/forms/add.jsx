@@ -10,9 +10,9 @@ import { Input } from '@components/forms/fields/_index'
 import { Store } from '@store/context'
 import { CreateMilk } from '@services/http-client'
 
-const initialValues = { size: 0, day: '' }
+const initialValues = { size: '', day: '' }
 const validationSchema = yup.object().shape({
-    size: yup.number('milk size must be number').required('Milk Size is required').positive(),
+    size: yup.number().typeError('you must specify a number').positive('Must be a positive number.').min(1, 'Milk size must be greater than or equal to 1').required('Milk Size must be Number'),
     entryDate: yup.date().required('Entry Day is required')
 })
 
