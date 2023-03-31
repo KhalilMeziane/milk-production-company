@@ -16,3 +16,12 @@ exports.verifyAuthorization = async (req, res, next) => {
         return next(createError.Unauthorized())
     }
 }
+
+exports.verifyIsAdmin = async (req, res, next) => {
+    const { role } = req.user
+    if (role === 'admin') {
+        next()
+    } else {
+        return next(createError.Unauthorized())
+    }
+}

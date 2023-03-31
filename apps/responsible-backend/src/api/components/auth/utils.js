@@ -25,9 +25,9 @@ exports.comparePassword = async function (hashPassword, password) {
     }
 }
 
-exports.signAccessToken = ({ id, fullName }) => {
+exports.signAccessToken = ({ id, fullName, role }) => {
     return new Promise((resolve, reject) => {
-        const payload = { id, fullName }
+        const payload = { id, fullName, role }
         const options = { expiresIn: '1d' }
         JWT.sign(payload, process.env.ACCESS_TOKEN_SECRET, options, (error, token) => {
             if (error) {
@@ -38,9 +38,9 @@ exports.signAccessToken = ({ id, fullName }) => {
     })
 }
 
-exports.signRefreshToken = ({ id, fullName }) => {
+exports.signRefreshToken = ({ id, fullName, role }) => {
     return new Promise((resolve, reject) => {
-        const payload = { id, fullName }
+        const payload = { id, fullName, role }
         const options = { expiresIn: '1y' }
         JWT.sign(payload, process.env.REFRESH_TOKEN_SECRET, options, (error, token) => {
             if (error) {
@@ -57,8 +57,8 @@ exports.verifyAccessToken = (accessToken) => {
             if (error) {
                 return reject(createError.Unauthorized())
             }
-            const { id, fullName } = payload
-            resolve({ id, fullName })
+            const { id, fullName, role } = payload
+            resolve({ id, fullName, role })
         })
     })
 }
@@ -69,8 +69,8 @@ exports.verifyRefreshToken = (refreshToken) => {
             if (error) {
                 return reject(createError.Unauthorized())
             }
-            const { id, fullName } = payload
-            resolve({ id, fullName })
+            const { id, fullName, role } = payload
+            resolve({ id, fullName, role })
         })
     })
 }

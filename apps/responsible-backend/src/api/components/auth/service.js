@@ -20,10 +20,9 @@ exports.login = async ({ email, password }) => {
                     return reject(createError.BadRequest('Invalid email or password'))
                 }
                 const { password, ...targetUser } = user
-                console.log('user from login: ', user)
                 return Promise.all([
-                    signAccessToken({ id: user.id, fullName: user.fullName }),
-                    signRefreshToken({ id: user.id, fullName: user.fullName }),
+                    signAccessToken({ id: user.id, fullName: user.fullName, role: user.role }),
+                    signRefreshToken({ id: user.id, fullName: user.fullName, role: user.role }),
                     data,
                     targetUser
                 ])
