@@ -1,7 +1,7 @@
-import React, { useContext } from 'react'
+import React, { useContext, useCallback, useEffect } from 'react'
 
 import { Avatar, Box, Flex, HStack, Menu, MenuButton, MenuDivider, MenuItem, MenuList, Heading } from '@chakra-ui/react'
-import { Link as LinkRouter, useNavigate } from 'react-router-dom'
+import { Link as LinkRouter, useNavigate, Navigate } from 'react-router-dom'
 import { FiChevronDown, FiUsers } from 'react-icons/fi'
 import { VscSignOut } from 'react-icons/vsc'
 import { AiOutlineUser } from 'react-icons/ai'
@@ -12,7 +12,7 @@ import Profile from './profile'
 import { Brand } from '@config/constants'
 import { Store } from '@store/context'
 import usePrivateAxios from '@services/private-axios'
-import { LOGOUT } from '@services/end-pointes'
+import { LOGOUT, PROFILE } from '@services/end-pointes'
 
 const MenuItems = [
     { name: 'Cows', path: '/cows', icon: TbReportAnalytics },
@@ -34,6 +34,18 @@ export default function Navbar (props) {
             console.log('error: ', error.response)
         }
     }
+    const fetchProfile = useCallback(async () => {
+        try {
+            const { data } = await axiosPrivate.get(PROFILE)
+            dispatch({ type: 'AUTH_REFRESH', payload: data.profile })
+        } catch (error) {
+            console.log('error')
+            return <Navigate to="/" />
+        }
+    }, [])
+    useEffect(() => {
+        fetchProfile()
+    }, [fetchProfile])
     return (
         <Flex
             px={{ base: 4, md: 8, lg: 16, xl: 24 }}
