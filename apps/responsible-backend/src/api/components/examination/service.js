@@ -79,20 +79,6 @@ exports.deleteExamination = async (id) => {
     })
 }
 
-exports.getExaminations = async () => {
-    return new Promise((resolve, reject) => {
-        try {
-            const db = fs.readFileSync(dbUri)
-            const data = JSON.parse(db)
-            const { examinations } = data
-            return resolve(examinations)
-        } catch (error) {
-            console.log('S error: ', error)
-            return reject(createError.InternalServerError())
-        }
-    })
-}
-
 exports.getExamination = async (id) => {
     return new Promise((resolve, reject) => {
         try {
