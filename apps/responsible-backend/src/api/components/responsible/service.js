@@ -70,3 +70,34 @@ exports.getResponsibles = async (id) => {
         }
     })
 }
+
+exports.updateResponsible = async ({ id, role }) => {
+    return new Promise((resolve, reject) => {
+        try {
+            const db = fs.readFileSync(dbUri)
+            const data = JSON.parse(db)
+            const { users } = data
+            const targetUser = users.find(user => user.id === id)
+            if (!targetUser) {
+                reject(createError.Conflict('Credentials is not found'))
+            }
+            const usersList = users.map(user => {
+                if (user.id === id) {
+                    return {
+                        ...user,
+                        role
+                    }
+                } else {
+                    return user
+                }
+            })
+            fs.writeFile(dbUri, JSON.stringify({ ...data, users: usersList }), 'utf8', (err) => {
+                if (err) throw err
+            })
+            return resolve({ ...targetUser, role })
+        } catch (error) {
+            console.log('S error: ', error)
+            return reject(createError.InternalServerError())
+        }
+    })
+}

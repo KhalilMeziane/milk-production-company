@@ -74,6 +74,11 @@ export const DeleteResponsible = (accessToken, id) => {
     return axios.delete(`${RESPONSIBLE}/${id}`)
 }
 
+export const UpdateResponsible = (accessToken, id, body) => {
+    setAuthHeader(accessToken)
+    return axios.patch(`${RESPONSIBLE}/${id}`, body)
+}
+
 // EXAMINATION Calls
 export const GetExamination = (accessToken, id) => {
     setAuthHeader(accessToken)

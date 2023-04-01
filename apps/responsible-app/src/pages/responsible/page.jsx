@@ -4,15 +4,22 @@ import React, { useEffect, useContext } from 'react'
 import { MenuButton, Icon } from '@chakra-ui/react'
 import { MdDeleteOutline } from 'react-icons/md'
 import { BiDotsVerticalRounded } from 'react-icons/bi'
+import { FiEdit } from 'react-icons/fi'
 
 import { Brand } from '@config/constants'
 import { Menu, Layout, Head, Table } from '@components/_index'
-import { DeleteUser } from './components/forms/_index'
+import { DeleteUser, UpdateResponsible } from './components/forms/_index'
 import { AddUser } from './components/blocks'
 import { GetResponsibles } from '@services/http-client'
 import { Store } from '@store/context'
 
 const MenuList = [
+    {
+        title: 'Edit Responsible',
+        text: 'Edit',
+        icon: FiEdit,
+        body: <UpdateResponsible />
+    },
     {
         title: 'Delete User',
         text: 'Delete',

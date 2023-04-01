@@ -1,5 +1,5 @@
 const yup = require('yup')
-const { createResponsible, deleteResponsible, getResponsibles } = require('./service')
+const { createResponsible, deleteResponsible, getResponsibles, updateResponsible } = require('./service')
 
 const createAccount = yup.object().shape({
     email: yup.string().email('Invalid email').required('Email is required'),
@@ -51,6 +51,27 @@ exports.getResponsibles = async (req, res, next) => {
         }
         next({
             message: error.errors,
+            status: error.status || 500
+        })
+    }
+}
+
+const updateSchema = yup.object().shape({
+    role: yup.string().oneOf(['admin', 'moderator'], 'Invalid option selected').required('User Role is required')
+})
+exports.updateResponsible = async (req, res, next) => {
+    const { id } = req.params
+    const { role } = req.body
+    try {
+        await updateSchema.validate(req.body, { abortEarly: false })
+        const user = await updateResponsible({ id, role })
+        res.status(201).json({ user })
+    } catch (error) {
+        if (error.errors) {
+            error.status = 400
+        }
+        next({
+            message: error.errors || error,
             status: error.status || 500
         })
     }
