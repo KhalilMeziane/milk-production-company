@@ -1,16 +1,11 @@
-const fs = require('fs')
-const path = require('path')
 const createError = require('http-errors')
 const { v4: uuidv4 } = require('uuid')
 const { hashPassword } = require('../auth/utils')
-
-const dbUri = path.join(__dirname, '/../../../db', 'db.json')
+const { readData, saveData } = require('../../../db/db')
 
 exports.createResponsible = async ({ email, password, fullName, role }) => {
     return new Promise((resolve, reject) => {
-        const db = fs.readFileSync(dbUri)
-        const data = JSON.parse(db)
-        const { users } = data
+        const { users, ...data } = readData()
         const user = users.find(user => user.email === email)
         if (user) {
             return reject(createError.Conflict('Credentials is already registered'))
@@ -25,11 +20,9 @@ exports.createResponsible = async ({ email, password, fullName, role }) => {
                     role,
                     createdAt: new Date().toISOString().split('T')[0]
                 }
-                data.users.push(newUser)
+                users.push(newUser)
                 const { password, ...user } = newUser
-                fs.writeFile(dbUri, JSON.stringify({ ...data }), 'utf8', (err) => {
-                    if (err) throw err
-                })
+                saveData({ ...data, users })
                 return resolve(user)
             })
             .catch(error => {
@@ -41,17 +34,13 @@ exports.createResponsible = async ({ email, password, fullName, role }) => {
 
 exports.deleteResponsible = async ({ id }) => {
     return new Promise((resolve, reject) => {
-        const db = fs.readFileSync(dbUri)
-        const data = JSON.parse(db)
-        const { users } = data
+        const { users, ...data } = readData()
         const targetUser = users.find(user => user.id === id)
         if (!targetUser) {
             reject(createError.Conflict('Credentials is not found'))
         }
         const filteredUsers = users.filter(user => user.id !== id)
-        fs.writeFile(dbUri, JSON.stringify({ ...data, users: filteredUsers }), 'utf8', (err) => {
-            if (err) throw err
-        })
+        saveData({ ...data, users: filteredUsers })
         return resolve()
     })
 }
@@ -59,9 +48,7 @@ exports.deleteResponsible = async ({ id }) => {
 exports.getResponsibles = async (id) => {
     return new Promise((resolve, reject) => {
         try {
-            const db = fs.readFileSync(dbUri)
-            const data = JSON.parse(db)
-            const { users } = data
+            const { users } = readData()
             const filteredList = users.filter(user => user.id !== id)
             return resolve(filteredList)
         } catch (error) {
@@ -74,9 +61,7 @@ exports.getResponsibles = async (id) => {
 exports.updateResponsible = async ({ id, role }) => {
     return new Promise((resolve, reject) => {
         try {
-            const db = fs.readFileSync(dbUri)
-            const data = JSON.parse(db)
-            const { users } = data
+            const { users, ...data } = readData()
             const targetUser = users.find(user => user.id === id)
             if (!targetUser) {
                 reject(createError.Conflict('Credentials is not found'))
@@ -91,9 +76,7 @@ exports.updateResponsible = async ({ id, role }) => {
                     return user
                 }
             })
-            fs.writeFile(dbUri, JSON.stringify({ ...data, users: usersList }), 'utf8', (err) => {
-                if (err) throw err
-            })
+            saveData({ ...data, users: usersList })
             return resolve({ ...targetUser, role })
         } catch (error) {
             console.log('S error: ', error)

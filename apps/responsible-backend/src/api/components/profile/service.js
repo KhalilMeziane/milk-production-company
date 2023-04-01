@@ -1,15 +1,10 @@
-const fs = require('fs')
-const path = require('path')
 const createError = require('http-errors')
 const { signAccessToken, signRefreshToken, hashPassword, comparePassword } = require('../auth/utils')
-
-const dbUri = path.join(__dirname, '/../../../db', 'db.json')
+const { readData, saveData } = require('../../../db/db')
 
 exports.getInfo = (id) => {
     return new Promise((resolve, reject) => {
-        const db = fs.readFileSync(dbUri)
-        const data = JSON.parse(db)
-        const { users } = data
+        const { users } = readData()
         const user = users.find(user => user.id === id)
         if (!user) {
             return reject(createError.BadRequest('Invalid email or password'))
@@ -20,9 +15,7 @@ exports.getInfo = (id) => {
 
 exports.updateInfo = ({ id, body }) => {
     return new Promise((resolve, reject) => {
-        const db = fs.readFileSync(dbUri)
-        const data = JSON.parse(db)
-        const { users } = data
+        const { users, ...data } = readData()
         const user = users.find(user => user.id === id)
         if (!user) {
             return reject(createError.NotFound())
@@ -48,9 +41,7 @@ exports.updateInfo = ({ id, body }) => {
                         }
                     }
                 })
-                fs.writeFile(dbUri, JSON.stringify({ ...data, users: usersList }), 'utf8', (err) => {
-                    if (err) throw err
-                })
+                saveData({ ...data, users: usersList })
                 const { password, ...targetUser } = usersList.find(user => user.id === id)
                 return resolve({ ...targetUser, accessToken })
             })
@@ -63,9 +54,7 @@ exports.updateInfo = ({ id, body }) => {
 
 exports.updatePassword = ({ id, body }) => {
     return new Promise((resolve, reject) => {
-        const db = fs.readFileSync(dbUri)
-        const data = JSON.parse(db)
-        const { users } = data
+        const { users, ...data } = readData()
         const user = users.find(user => user.id === id)
         if (!user) {
             return reject(createError.NotFound())
@@ -88,9 +77,7 @@ exports.updatePassword = ({ id, body }) => {
                         }
                     }
                 })
-                fs.writeFile(dbUri, JSON.stringify({ ...data, users: usersList }), 'utf8', (err) => {
-                    if (err) throw err
-                })
+                saveData({ ...data, users: usersList })
                 return resolve()
             })
             .catch(error => {

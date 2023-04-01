@@ -1,9 +1,6 @@
-const fs = require('fs')
-const path = require('path')
 const createError = require('http-errors')
 const { v4: uuidv4 } = require('uuid')
-
-const dbUri = path.join(__dirname, '/../../../db', 'db.json')
+const { readData, saveData } = require('../../../db/db')
 
 exports.createCow = ({ addedBy, breed, entryDate, motherId }) => {
     const cow = {
@@ -16,12 +13,9 @@ exports.createCow = ({ addedBy, breed, entryDate, motherId }) => {
     }
     return new Promise((resolve, reject) => {
         try {
-            const db = fs.readFileSync(dbUri)
-            const data = JSON.parse(db)
-            data.cows.push(cow)
-            fs.writeFile(dbUri, JSON.stringify({ ...data }), 'utf8', (err) => {
-                if (err) throw err
-            })
+            const { cows, ...data } = readData()
+            cows.push(cow)
+            saveData({ ...data, cows })
             return resolve(cow)
         } catch (error) {
             console.log('S error: ', error)
@@ -33,9 +27,7 @@ exports.createCow = ({ addedBy, breed, entryDate, motherId }) => {
 exports.updateCow = ({ id, body }) => {
     return new Promise((resolve, reject) => {
         try {
-            const db = fs.readFileSync(dbUri)
-            const data = JSON.parse(db)
-            const { cows } = data
+            const { cows, ...data } = readData()
             const targetCow = cows.find(cow => cow.id === id)
             if (!targetCow) {
                 return reject(createError.NotFound())
@@ -50,9 +42,7 @@ exports.updateCow = ({ id, body }) => {
                     }
                 }
             })
-            fs.writeFile(dbUri, JSON.stringify({ ...data, cows: cowsList }), 'utf8', (err) => {
-                if (err) throw err
-            })
+            saveData({ ...data, cows: cowsList })
             return resolve(cowsList.find(cow => cow.id === id))
         } catch (error) {
             console.log('S error: ', error)
@@ -64,17 +54,13 @@ exports.updateCow = ({ id, body }) => {
 exports.deleteCow = (id) => {
     return new Promise((resolve, reject) => {
         try {
-            const db = fs.readFileSync(dbUri)
-            const data = JSON.parse(db)
-            const { cows } = data
+            const { cows, ...data } = readData()
             const targetCow = cows.find(cow => cow.id === id)
             if (!targetCow) {
                 return reject(createError.NotFound())
             }
             const filteredCows = cows.filter(cow => cow.id !== id)
-            fs.writeFile(dbUri, JSON.stringify({ ...data, cows: filteredCows }), 'utf8', (err) => {
-                if (err) throw err
-            })
+            saveData({ ...data, cows: filteredCows })
             return resolve()
         } catch (error) {
             console.log('S error: ', error)
@@ -86,9 +72,7 @@ exports.deleteCow = (id) => {
 exports.getCows = () => {
     return new Promise((resolve, reject) => {
         try {
-            const db = fs.readFileSync(dbUri)
-            const data = JSON.parse(db)
-            const { cows } = data
+            const { cows } = readData()
             return resolve(cows)
         } catch (error) {
             console.log('S error: ', error)

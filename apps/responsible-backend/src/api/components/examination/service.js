@@ -1,9 +1,6 @@
-const fs = require('fs')
-const path = require('path')
 const createError = require('http-errors')
 const { v4: uuidv4 } = require('uuid')
-
-const dbUri = path.join(__dirname, '/../../../db', 'db.json')
+const { readData, saveData } = require('../../../db/db')
 
 exports.createExamination = async ({ addedBy, body }) => {
     const examination = {
@@ -12,12 +9,9 @@ exports.createExamination = async ({ addedBy, body }) => {
     }
     return new Promise((resolve, reject) => {
         try {
-            const db = fs.readFileSync(dbUri)
-            const data = JSON.parse(db)
-            data.examinations.push(examination)
-            fs.writeFile(dbUri, JSON.stringify({ ...data }), 'utf8', (err) => {
-                if (err) throw err
-            })
+            const { examinations, ...data } = readData()
+            examinations.push(examination)
+            saveData({ ...data, examinations })
             return resolve(examination)
         } catch (error) {
             console.log('S error: ', error)
@@ -29,9 +23,7 @@ exports.createExamination = async ({ addedBy, body }) => {
 exports.updateExamination = async ({ id, body }) => {
     return new Promise((resolve, reject) => {
         try {
-            const db = fs.readFileSync(dbUri)
-            const data = JSON.parse(db)
-            const { examinations } = data
+            const { examinations, ...data } = readData()
             const targetExamination = examinations.find(examination => examination.id === id)
             if (!targetExamination) {
                 return reject(createError.NotFound())
@@ -46,9 +38,7 @@ exports.updateExamination = async ({ id, body }) => {
                     }
                 }
             })
-            fs.writeFile(dbUri, JSON.stringify({ ...data, examinations: examinationsList }), 'utf8', (err) => {
-                if (err) throw err
-            })
+            saveData({ ...data, examinations: examinationsList })
             return resolve(examinationsList.find(examination => examination.id === id))
         } catch (error) {
             console.log('S error: ', error)
@@ -60,17 +50,13 @@ exports.updateExamination = async ({ id, body }) => {
 exports.deleteExamination = async (id) => {
     return new Promise((resolve, reject) => {
         try {
-            const db = fs.readFileSync(dbUri)
-            const data = JSON.parse(db)
-            const { examinations } = data
+            const { examinations, ...data } = readData()
             const targetExamination = examinations.find(examination => examination.id === id)
             if (!targetExamination) {
                 return reject(createError.NotFound())
             }
             const filteredExaminations = examinations.filter(examination => examination.id !== id)
-            fs.writeFile(dbUri, JSON.stringify({ ...data, examinations: filteredExaminations }), 'utf8', (err) => {
-                if (err) throw err
-            })
+            saveData({ ...data, examinations: filteredExaminations })
             return resolve()
         } catch (error) {
             console.log('S error: ', error)
@@ -82,9 +68,7 @@ exports.deleteExamination = async (id) => {
 exports.getExamination = async (id) => {
     return new Promise((resolve, reject) => {
         try {
-            const db = fs.readFileSync(dbUri)
-            const data = JSON.parse(db)
-            const { examinations } = data
+            const { examinations } = readData()
             const TargetExaminations = examinations.filter(examination => examination.cowId === id)
             return resolve(TargetExaminations)
         } catch (error) {

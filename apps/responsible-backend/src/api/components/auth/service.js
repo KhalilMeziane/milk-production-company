@@ -1,15 +1,10 @@
-const fs = require('fs')
-const path = require('path')
 const createError = require('http-errors')
 const { comparePassword, signAccessToken, signRefreshToken } = require('./utils')
-
-const dbUri = path.join(__dirname, '/../../../db', 'db.json')
+const { readData, saveData } = require('../../../db/db')
 
 exports.login = async ({ email, password }) => {
     return new Promise((resolve, reject) => {
-        const db = fs.readFileSync(dbUri)
-        const data = JSON.parse(db)
-        const { users } = data
+        const { users, ...data } = readData()
         const user = users.find(user => user.email === email)
         if (!user) {
             reject(createError.BadRequest('Invalid email or password'))
@@ -38,9 +33,7 @@ exports.login = async ({ email, password }) => {
                         return user
                     }
                 })
-                fs.writeFile(dbUri, JSON.stringify({ ...data, users: newUsers }), 'utf8', (err) => {
-                    if (err) throw err
-                })
+                saveData({ ...data, users: newUsers })
                 return resolve({ ...targetUser, accessToken, refreshToken })
             })
             .catch(error => {
@@ -52,33 +45,27 @@ exports.login = async ({ email, password }) => {
 
 exports.logout = async ({ id }) => {
     return new Promise((resolve, reject) => {
-        const db = fs.readFileSync(dbUri)
-        const data = JSON.parse(db)
-        const { users } = data
+        const { users, ...data } = readData()
         const targetUser = users.find(user => user.id === id)
         if (!targetUser) {
             reject(createError.Conflict('Credentials is not found'))
         }
         const { refreshToken, ...user } = targetUser
-        const newUsers = data.users.map(itemUser => {
+        const newUsers = users.map(itemUser => {
             if (itemUser.id === id) {
                 return { ...user }
             } else {
                 return itemUser
             }
         })
-        fs.writeFile(dbUri, JSON.stringify({ ...data, users: newUsers }), 'utf8', (err) => {
-            if (err) throw err
-        })
+        saveData({ ...data, users: newUsers })
         return resolve()
     })
 }
 
 exports.refreshTokens = async (refreshToken, id) => {
     return new Promise((resolve, reject) => {
-        const db = fs.readFileSync(dbUri)
-        const data = JSON.parse(db)
-        const { users } = data
+        const { users, ...data } = readData()
         const user = users.find(user => user.id === id)
         if (!user.refreshToken || user.refreshToken !== refreshToken) {
             reject(createError.Unauthorized())
@@ -89,7 +76,7 @@ exports.refreshTokens = async (refreshToken, id) => {
         ])
             .then(tokens => {
                 const [accessToken, refreshToken] = tokens
-                const newUsers = data.users.map(user => {
+                const newUsers = users.map(user => {
                     if (user.id === id) {
                         return {
                             ...user,
@@ -99,9 +86,7 @@ exports.refreshTokens = async (refreshToken, id) => {
                         return user
                     }
                 })
-                fs.writeFile(dbUri, JSON.stringify({ ...data, users: newUsers }), 'utf8', (err) => {
-                    if (err) throw err
-                })
+                saveData({ ...data, users: newUsers })
                 return resolve({ accessToken, refreshToken })
             })
             .catch(error => {
