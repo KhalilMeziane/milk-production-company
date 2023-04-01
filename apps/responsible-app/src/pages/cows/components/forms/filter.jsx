@@ -3,20 +3,27 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { Button, HStack } from '@chakra-ui/react'
 import { Form } from 'formik'
+import { useSearchParams } from 'react-router-dom'
 
 import FormCustom from '@components/forms/form'
 import { Select } from '@components/forms/fields/_index'
 
-const initialValues = { breed: '', addedBy: '' }
+const initialValues = { breed: '', origin: '' }
 
-export default function Filter ({ onClose }) {
+export default function Filter ({ onClose, setFilter }) {
+    const [, setSearchParams] = useSearchParams()
+    const handelFilter = (values) => {
+        for (const filter in values) {
+            setFilter(filter, values[filter] || '')
+        }
+        setSearchParams(values)
+        onClose()
+    }
     return (
         <>
             <FormCustom
                 initialValues={initialValues}
-                handelSubmit={(values) => {
-                    console.log('values: ', values)
-                }}
+                handelSubmit={handelFilter}
             >
                 {
                     () => {
@@ -27,10 +34,10 @@ export default function Filter ({ onClose }) {
                                     <option value="holstein">Holstein</option>
                                     <option value="montbliard">Montbliard</option>
                                 </Select>
-                                <Select label="Added By" name="addedBy">
-                                    <option value="" selected disabled>Select User</option>
-                                    <option value="khalil">khalil</option>
-                                    <option value="ahmed">ahmed</option>
+                                <Select label="Origin" name="origin">
+                                    <option value="" selected disabled>Select Origin</option>
+                                    <option value="farm">farm</option>
+                                    <option value="importer">importer</option>
                                 </Select>
                                 <HStack justifyContent="flex-end" mt="2">
                                     <Button px="5" rounded="sm" colorScheme="brand" variant="outline" fontWeight="medium" onClick={onClose}>Close</Button>
@@ -46,5 +53,6 @@ export default function Filter ({ onClose }) {
 }
 
 Filter.propTypes = {
-    onClose: PropTypes.func.isRequired
+    onClose: PropTypes.func.isRequired,
+    setFilter: PropTypes.func.isRequired
 }

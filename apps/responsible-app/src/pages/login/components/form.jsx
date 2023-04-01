@@ -27,7 +27,7 @@ export default function LoginForm () {
             const { data } = await Login(values)
             localStorage.setItem('auth', JSON.stringify(data))
             dispatch({ type: 'AUTH_LOGIN', payload: data })
-            return <Navigate to="/cows" replace={true} />
+            return <Navigate to="/cows" />
         } catch (error) {
             setError('Invalid email or password')
             console.log('http error: ', error.response)

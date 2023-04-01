@@ -7,8 +7,11 @@ import { Table, Thead, Tbody, Tr, Th, Td } from '@chakra-ui/table'
 import { Box, Flex, Select, HStack, IconButton, Heading, InputGroup, InputLeftElement, Input } from '@chakra-ui/react'
 import { IoIosArrowBack, IoIosArrowForward } from 'react-icons/io'
 import { AiOutlineSearch } from 'react-icons/ai'
+import { RiFilterOffLine } from 'react-icons/ri'
+import { useSearchParams } from 'react-router-dom'
 
 export default function CustomTable ({ data, columns: cols, title, optionsList, ...props }) {
+    const [, setSearchParams] = useSearchParams()
     const columns = useMemo(() => [...cols], [cols])
     const tableProps = useTable(
         {
@@ -26,8 +29,9 @@ export default function CustomTable ({ data, columns: cols, title, optionsList, 
             <Flex justifyContent="space-between" py={'3'} bg={'white'}>
                 <SearchComponent preGlobalFilteredRows={tableProps.preGlobalFilteredRows} globalFilter={tableProps.globalFilter} setGlobalFilter={tableProps.setGlobalFilter} />
                 <HStack>
+                    <IconButton variant='solid' colorScheme='gray' icon={<RiFilterOffLine />} onClick={() => { tableProps.setAllFilters([]); setSearchParams({}) }} />
                     {
-                        optionsList && optionsList.map((Item, index) => <Item key={index}/>)
+                        optionsList && optionsList.map((Item, index) => <Item setFilter={tableProps.setFilter} key={index}/>)
                     }
                 </HStack>
             </Flex>

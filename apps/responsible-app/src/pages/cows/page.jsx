@@ -7,6 +7,7 @@ import { BiDotsVerticalRounded } from 'react-icons/bi'
 import { FiEdit } from 'react-icons/fi'
 import { BsInfoSquare } from 'react-icons/bs'
 import { GrAddCircle } from 'react-icons/gr'
+// import { useSearchParams } from 'react-router-dom'
 
 import { Brand } from '@config/constants'
 import { Menu, Layout, Head, Table } from '@components/_index'
@@ -59,6 +60,11 @@ const tableHeadColumns = [
 ]
 
 export default function Cows () {
+    // const [searchParams] = useSearchParams()
+    // const filters = {
+    //     breed: searchParams.get('breed'),
+    //     origin: searchParams.get('origin')
+    // }
     const [state, dispatch] = useContext(Store)
     const controller = new AbortController()
     const fetchCows = async () => {

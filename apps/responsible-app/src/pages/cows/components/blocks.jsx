@@ -22,12 +22,12 @@ export const AddCow = () => {
     )
 }
 
-export const Filter = () => {
+export const Filter = ({ setFilter }) => {
     return (
         <>
             <Modal title={'Filter Cows'}>
                 <IconButton rounded="sm" colorScheme='brand' variant='outline' fontSize='24px' icon={<CiFilter/>} />
-                <FilterForm />
+                <FilterForm setFilter={setFilter} />
             </Modal>
         </>
     )
