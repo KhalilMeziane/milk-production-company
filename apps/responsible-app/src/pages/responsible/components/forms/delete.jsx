@@ -8,7 +8,8 @@ import * as yup from 'yup'
 import FormCustom from '@components/forms/form'
 import { Input } from '@components/forms/fields/_index'
 import { Store } from '@store/context'
-import { DeleteResponsible as DeleteResponsibleCall } from '@services/http-client'
+import usePrivateAxios from '@services/private-axios'
+import { RESPONSIBLE } from '@services/end-pointes'
 
 export default function DeleteResponsible ({ onClose, data }) {
     const initialValues = { email: '' }
@@ -18,10 +19,11 @@ export default function DeleteResponsible ({ onClose, data }) {
     const [error, setError] = useState(false)
     const [isLoading, setLoading] = useState(false)
     const [state, dispatch] = useContext(Store)
+    const axiosPrivate = usePrivateAxios()
     const handelSubmit = async () => {
         try {
             setLoading(true)
-            await DeleteResponsibleCall(state.auth.accessToken, data.id)
+            await axiosPrivate.delete(`${RESPONSIBLE}/${data.id}`)
             const filteredResponsibles = state.responsibles.filter(item => item.id !== data.id)
             dispatch({ type: 'DELETE_RESPONSIBLE', payload: filteredResponsibles })
             onClose()

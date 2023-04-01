@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import React, { useEffect, useContext, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 import PropTypes from 'prop-types'
 import { HStack, Text, Button, VStack, Grid, GridItem, IconButton, Heading, Divider, useDisclosure, PopoverTrigger, PopoverContent, PopoverArrow, PopoverCloseButton, Popover } from '@chakra-ui/react'
@@ -8,8 +8,8 @@ import { CiFilter } from 'react-icons/ci'
 
 import { Modal } from '@components/_index'
 import { AddCow as AddCowForm, Filter as FilterForm, EditMedical } from './forms/_index'
-import { GetExamination, DeleteExamination } from '@services/http-client'
-import { Store } from '@store/context'
+import usePrivateAxios from '@services/private-axios'
+import { EXAMINATION } from '@services/end-pointes'
 
 export const AddCow = () => {
     return (
@@ -36,11 +36,11 @@ export const Filter = ({ setFilter }) => {
 export const ViewCow = ({ onClose, data }) => {
     const { id } = data
     const controller = new AbortController()
-    const [state] = useContext(Store)
     const [diseases, setDiseases] = useState([])
+    const axiosPrivate = usePrivateAxios()
     const fetchCowExamination = async () => {
         try {
-            const { data } = await GetExamination(state.auth.accessToken, id)
+            const { data } = await axiosPrivate.get(`${EXAMINATION}/${id}`)
             setDiseases(data.examinations)
         } catch (error) {
             console.log('error: ', error.response)
@@ -53,9 +53,10 @@ export const ViewCow = ({ onClose, data }) => {
             controller.abort()
         }
     }, [])
+
     const HandelDelete = async (id) => {
         try {
-            await DeleteExamination(state.auth.accessToken, id)
+            await axiosPrivate.patch(`${EXAMINATION}/${id}`)
             await fetchCowExamination()
         } catch (error) {
             console.log('error: ', error.response)

@@ -8,7 +8,8 @@ import * as yup from 'yup'
 import FormCustom from '@components/forms/form'
 import { Select } from '@components/forms/fields/_index'
 import { Store } from '@store/context'
-import { UpdateResponsible as UpdateResponsibleCall } from '@services/http-client'
+import usePrivateAxios from '@services/private-axios'
+import { RESPONSIBLE } from '@services/end-pointes'
 
 const validationSchema = yup.object().shape({
     role: yup.string().oneOf(['admin', 'moderator'], 'Invalid option selected').required('User Role is required')
@@ -19,10 +20,11 @@ export default function UpdateResponsible ({ onClose, data: responsible }) {
     const [error, setError] = useState(false)
     const [isLoading, setLoading] = useState(false)
     const [state, dispatch] = useContext(Store)
+    const axiosPrivate = usePrivateAxios()
     const handelSubmit = async (values) => {
         try {
             setLoading(true)
-            const { data } = await UpdateResponsibleCall(state.auth.accessToken, responsible.id, values)
+            const { data } = await axiosPrivate.patch(`${RESPONSIBLE}/${responsible.id}`, values)
             const responsiblesList = state.responsibles.map(user => {
                 if (user.id === data.user.id) {
                     return {

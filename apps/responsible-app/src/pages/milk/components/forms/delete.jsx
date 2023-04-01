@@ -8,7 +8,8 @@ import * as yup from 'yup'
 import FormCustom from '@components/forms/form'
 import { Input } from '@components/forms/fields/_index'
 import { Store } from '@store/context'
-import { DeleteMilk as DeleteMilkCall } from '@services/http-client'
+import usePrivateAxios from '@services/private-axios'
+import { MILKS } from '@services/end-pointes'
 
 export default function DeleteMilk ({ onClose, data }) {
     const initialValues = { entryDate: '' }
@@ -18,10 +19,11 @@ export default function DeleteMilk ({ onClose, data }) {
     const [error, setError] = useState(false)
     const [isLoading, setLoading] = useState(false)
     const [state, dispatch] = useContext(Store)
+    const axiosPrivate = usePrivateAxios()
     const handelSubmit = async () => {
         try {
             setLoading(true)
-            await DeleteMilkCall(state.auth.accessToken, data.id)
+            await axiosPrivate.delete(`${MILKS}/${data.id}`)
             const filteredMilks = state.milks.filter(item => item.id !== data.id)
             dispatch({ type: 'DELETE_MILK', payload: filteredMilks })
             onClose()

@@ -8,7 +8,8 @@ import * as yup from 'yup'
 import FormCustom from '@components/forms/form'
 import { Input } from '@components/forms/fields/_index'
 import { Store } from '@store/context'
-import { CreateMilk } from '@services/http-client'
+import usePrivateAxios from '@services/private-axios'
+import { MILKS } from '@services/end-pointes'
 
 const initialValues = { size: '', day: '' }
 const validationSchema = yup.object().shape({
@@ -19,11 +20,12 @@ const validationSchema = yup.object().shape({
 export default function AddSize ({ onClose }) {
     const [error, setError] = useState(false)
     const [isLoading, setLoading] = useState(false)
-    const [state, dispatch] = useContext(Store)
+    const [, dispatch] = useContext(Store)
+    const axiosPrivate = usePrivateAxios()
     const handelSubmit = async (values) => {
         try {
             setLoading(true)
-            const { data } = await CreateMilk(state.auth.accessToken, values)
+            const { data } = await axiosPrivate.post(MILKS, values)
             dispatch({ type: 'SET_MILK', payload: data.milk })
             onClose()
         } catch (error) {

@@ -7,17 +7,19 @@ import { Form } from 'formik'
 import FormCustom from '@components/forms/form'
 import { Select, Input } from '@components/forms/fields/_index'
 import { Store } from '@store/context'
-import { UpdateCow } from '@services/http-client'
+import usePrivateAxios from '@services/private-axios'
+import { COWS as COWSUrl } from '@services/end-pointes'
 
 export default function EditCow ({ onClose, data }) {
     const initialValues = { breed: data.breed, entryDate: data.entryDate }
     const [error, setError] = useState(false)
     const [isLoading, setLoading] = useState(false)
     const [state, dispatch] = useContext(Store)
+    const axiosPrivate = usePrivateAxios()
     const handelSubmit = async (values) => {
         try {
             setLoading(true)
-            const response = await UpdateCow(state.auth.accessToken, data.id, values)
+            const response = await axiosPrivate.patch(`${COWSUrl}/${data.id}`, values)
             const cows = state.cows.map(item => {
                 if (item.id !== data.id) {
                     return item

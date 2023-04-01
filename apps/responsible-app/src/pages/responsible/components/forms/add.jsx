@@ -8,7 +8,8 @@ import * as yup from 'yup'
 import FormCustom from '@components/forms/form'
 import { Input, Select } from '@components/forms/fields/_index'
 import { Store } from '@store/context'
-import { CreateResponsible } from '@services/http-client'
+import usePrivateAxios from '@services/private-axios'
+import { RESPONSIBLE } from '@services/end-pointes'
 
 const initialValues = { fullName: '', email: '', password: '', role: '' }
 const validationSchema = yup.object().shape({
@@ -21,11 +22,12 @@ const validationSchema = yup.object().shape({
 export default function AddResponsible ({ onClose }) {
     const [error, setError] = useState(false)
     const [isLoading, setLoading] = useState(false)
-    const [state, dispatch] = useContext(Store)
+    const [, dispatch] = useContext(Store)
+    const axiosPrivate = usePrivateAxios()
     const handelSubmit = async (values) => {
         try {
             setLoading(true)
-            const { data } = await CreateResponsible(state.auth.accessToken, values)
+            const { data } = await axiosPrivate.post(RESPONSIBLE, values)
             dispatch({ type: 'SET_RESPONSIBLE', payload: data.user })
             onClose()
         } catch (error) {

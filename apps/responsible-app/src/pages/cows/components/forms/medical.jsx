@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react'
+import React, { useState } from 'react'
 
 import PropTypes from 'prop-types'
 import { Button, HStack, Text } from '@chakra-ui/react'
@@ -7,8 +7,8 @@ import * as yup from 'yup'
 
 import FormCustom from '@components/forms/form'
 import { Select, Input } from '@components/forms/fields/_index'
-import { Store } from '@store/context'
-import { CreateExamination } from '@services/http-client'
+import usePrivateAxios from '@services/private-axios'
+import { EXAMINATION } from '@services/end-pointes'
 
 const initialValues = { disease: '', date: '' }
 const validationSchema = yup.object().shape({
@@ -20,11 +20,11 @@ export default function Medical ({ onClose, data }) {
     const { id: cowId } = data
     const [error, setError] = useState(false)
     const [isLoading, setLoading] = useState(false)
-    const [state] = useContext(Store)
+    const axiosPrivate = usePrivateAxios()
     const handelSubmit = async (values) => {
         try {
             setLoading(true)
-            await CreateExamination(state.auth.accessToken, { ...values, cowId })
+            await axiosPrivate.post(`${EXAMINATION}`, { ...values, cowId })
             onClose()
         } catch (error) {
             setError('Error when try to create Medical')

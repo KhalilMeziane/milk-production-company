@@ -11,7 +11,8 @@ import { Menu, Layout, Head, Table } from '@components/_index'
 import { AddSize } from './components/blocks'
 import { DeleteSize, EditSize } from './components/forms/_index'
 import { Store } from '@store/context'
-import { GetMilks } from '@services/http-client'
+import usePrivateAxios from '@services/private-axios'
+import { MILKS } from '@services/end-pointes'
 
 const MenuList = [
     {
@@ -40,9 +41,10 @@ const tableHeadColumns = [
 export default function Milk () {
     const [state, dispatch] = useContext(Store)
     const controller = new AbortController()
+    const axiosPrivate = usePrivateAxios()
     const fetchMilks = async () => {
         try {
-            const { data } = await GetMilks(state.auth.accessToken)
+            const { data } = await axiosPrivate.get(MILKS)
             dispatch({ type: 'GET_MILKS', payload: data.milks })
         } catch (error) {
             console.log('error: ', error.response)

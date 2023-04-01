@@ -8,7 +8,8 @@ import * as yup from 'yup'
 import FormCustom from '@components/forms/form'
 import { Input } from '@components/forms/fields/_index'
 import { Store } from '@store/context'
-import { UpdateMilk } from '@services/http-client'
+import usePrivateAxios from '@services/private-axios'
+import { MILKS } from '@services/end-pointes'
 
 export default function EditMilk ({ onClose, data }) {
     const initialValues = { size: data.size, entryDate: data.entryDate }
@@ -19,10 +20,11 @@ export default function EditMilk ({ onClose, data }) {
     const [error, setError] = useState(false)
     const [isLoading, setLoading] = useState(false)
     const [state, dispatch] = useContext(Store)
+    const axiosPrivate = usePrivateAxios()
     const handelSubmit = async (values) => {
         try {
             setLoading(true)
-            const response = await UpdateMilk(state.auth.accessToken, data.id, values)
+            const response = await axiosPrivate.patch(`${MILKS}/${data.id}`, values)
             const milks = state.milks.map(item => {
                 if (item.id !== response.data.Milk.id) {
                     return item

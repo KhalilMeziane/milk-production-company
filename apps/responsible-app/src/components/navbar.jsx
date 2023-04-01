@@ -11,7 +11,8 @@ import Drawer from './drawer'
 import Profile from './profile'
 import { Brand } from '@config/constants'
 import { Store } from '@store/context'
-import { Logout } from '@services/http-client'
+import usePrivateAxios from '@services/private-axios'
+import { LOGOUT } from '@services/end-pointes'
 
 const MenuItems = [
     { name: 'Cows', path: '/cows', icon: TbReportAnalytics },
@@ -21,10 +22,11 @@ const MenuItems = [
 export default function Navbar (props) {
     const navigate = useNavigate()
     const [state, dispatch] = useContext(Store)
-    const { accessToken, role } = state.auth
+    const { role } = state.auth
+    const axiosPrivate = usePrivateAxios()
     const handelSubmit = async () => {
         try {
-            await Logout(accessToken)
+            await axiosPrivate.get(LOGOUT)
             dispatch({ type: 'AUTH_LOGOUT' })
             navigate('/')
             localStorage.removeItem('auth')

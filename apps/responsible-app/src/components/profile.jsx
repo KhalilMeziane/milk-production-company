@@ -8,8 +8,9 @@ import * as yup from 'yup'
 
 import FormCustom from '@components/forms/form'
 import { Input } from '@components/forms/fields/_index'
-import { UpdateInfo as UpdateInfoCall, UpdatePassword as UpdatePasswordCall } from '@services/http-client'
 import { Store } from '@store/context'
+import usePrivateAxios from '@services/private-axios'
+import { PROFILE } from '@services/end-pointes'
 
 export default function Profile ({ user, onClose }) {
     return (
@@ -41,11 +42,12 @@ const UpdateInfo = ({ onClose, user }) => {
     const initialValues = { fullName: user.fullName, email: user.email }
     const [error, setError] = useState(false)
     const [isLoading, setLoading] = useState(false)
-    const [state, dispatch] = useContext(Store)
+    const [, dispatch] = useContext(Store)
+    const axiosPrivate = usePrivateAxios()
     const handelSubmit = async (values) => {
         try {
             setLoading(true)
-            const { data } = await UpdateInfoCall(state.auth.accessToken, values)
+            const { data } = await axiosPrivate.patch(PROFILE, values)
             localStorage.setItem('auth', JSON.stringify(data))
             dispatch({ type: 'AUTH_LOGIN', payload: data })
             onClose()
@@ -90,11 +92,11 @@ const UpdatePassword = ({ onClose }) => {
     const initialValues = { newPassword: '', oldPassword: '' }
     const [error, setError] = useState(false)
     const [isLoading, setLoading] = useState(false)
-    const [state] = useContext(Store)
+    const axiosPrivate = usePrivateAxios()
     const handelSubmit = async (values) => {
         try {
             setLoading(true)
-            await UpdatePasswordCall(state.auth.accessToken, values)
+            await axiosPrivate.patch(`${PROFILE}/password`, values)
             onClose()
         } catch (error) {
             setError('Error when try to update Profile Info')

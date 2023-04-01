@@ -8,7 +8,8 @@ import * as yup from 'yup'
 import FormCustom from '@components/forms/form'
 import { Input } from '@components/forms/fields/_index'
 import { Store } from '@store/context'
-import { DeleteCow as DeleteCowCall } from '@services/http-client'
+import usePrivateAxios from '@services/private-axios'
+import { COWS as COWSUrl } from '@services/end-pointes'
 
 export default function DeleteCow ({ onClose, data }) {
     const initialValues = { id: '' }
@@ -18,10 +19,11 @@ export default function DeleteCow ({ onClose, data }) {
     const [error, setError] = useState(false)
     const [isLoading, setLoading] = useState(false)
     const [state, dispatch] = useContext(Store)
+    const axiosPrivate = usePrivateAxios()
     const handelSubmit = async () => {
         try {
             setLoading(true)
-            await DeleteCowCall(state.auth.accessToken, data.id)
+            await axiosPrivate.delete(`${COWSUrl}/${data.id}`)
             const filteredCows = state.cows.filter(item => item.id !== data.id)
             dispatch({ type: 'DELETE_COW', payload: filteredCows })
             onClose()

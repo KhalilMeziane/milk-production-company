@@ -8,7 +8,8 @@ import * as yup from 'yup'
 import FormCustom from '@components/forms/form'
 import { Select, Input } from '@components/forms/fields/_index'
 import { Store } from '@store/context'
-import { CreateCow } from '@services/http-client'
+import usePrivateAxios from '@services/private-axios'
+import { COWS as COWSUrl } from '@services/end-pointes'
 
 const initialValues = { breed: '', entryDate: '' }
 const validationSchema = yup.object().shape({
@@ -19,11 +20,12 @@ const validationSchema = yup.object().shape({
 export default function AddCow ({ onClose, data: motherCow }) {
     const [error, setError] = useState(false)
     const [isLoading, setLoading] = useState(false)
-    const [state, dispatch] = useContext(Store)
+    const [, dispatch] = useContext(Store)
+    const axiosPrivate = usePrivateAxios()
     const handelSubmit = async (values) => {
         try {
             setLoading(true)
-            const { data } = await CreateCow(state.auth.accessToken, { ...values, motherId: motherCow?.id })
+            const { data } = await axiosPrivate.post(COWSUrl, { ...values, motherId: motherCow?.id })
             dispatch({ type: 'SET_COW', payload: data.cow })
             onClose()
         } catch (error) {

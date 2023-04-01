@@ -7,14 +7,14 @@ import { BiDotsVerticalRounded } from 'react-icons/bi'
 import { FiEdit } from 'react-icons/fi'
 import { BsInfoSquare } from 'react-icons/bs'
 import { GrAddCircle } from 'react-icons/gr'
-// import { useSearchParams } from 'react-router-dom'
 
 import { Brand } from '@config/constants'
 import { Menu, Layout, Head, Table } from '@components/_index'
 import { AddCow, Filter, ViewCow } from './components/blocks'
 import { DeleteCow, EditCow, Medical, AddCow as AddCowForm } from './components/forms/_index'
-import { GetCows } from '@services/http-client'
+import { COWS as COWSUrl } from '@services/end-pointes'
 import { Store } from '@store/context'
+import usePrivateAxios from '@services/private-axios'
 
 const MenuList = [
     {
@@ -60,16 +60,12 @@ const tableHeadColumns = [
 ]
 
 export default function Cows () {
-    // const [searchParams] = useSearchParams()
-    // const filters = {
-    //     breed: searchParams.get('breed'),
-    //     origin: searchParams.get('origin')
-    // }
     const [state, dispatch] = useContext(Store)
     const controller = new AbortController()
+    const axiosPrivate = usePrivateAxios()
     const fetchCows = async () => {
         try {
-            const { data } = await GetCows(state.auth.accessToken)
+            const { data } = await axiosPrivate(COWSUrl)
             dispatch({ type: 'GET_COWS', payload: data.cows })
         } catch (error) {
             console.log('error: ', error.response)

@@ -10,8 +10,9 @@ import { Brand } from '@config/constants'
 import { Menu, Layout, Head, Table } from '@components/_index'
 import { DeleteUser, UpdateResponsible } from './components/forms/_index'
 import { AddUser } from './components/blocks'
-import { GetResponsibles } from '@services/http-client'
 import { Store } from '@store/context'
+import usePrivateAxios from '@services/private-axios'
+import { RESPONSIBLE } from '@services/end-pointes'
 
 const MenuList = [
     {
@@ -41,9 +42,10 @@ const tableHeadColumns = [
 export default function Users () {
     const [state, dispatch] = useContext(Store)
     const controller = new AbortController()
+    const axiosPrivate = usePrivateAxios()
     const fetchResponsibles = async () => {
         try {
-            const { data } = await GetResponsibles(state.auth.accessToken)
+            const { data } = await axiosPrivate.get(RESPONSIBLE)
             dispatch({ type: 'GET_RESPONSIBLES', payload: data.users })
         } catch (error) {
             console.log('error: ', error.response)

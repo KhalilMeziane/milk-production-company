@@ -1,6 +1,7 @@
 import axios from 'axios'
 import setAuthHeader from './set-auth-header'
 import { LOGIN, LOGOUT, REFRESH, COWS, MILKS, RESPONSIBLE, EXAMINATION, PROFILE } from './end-pointes'
+import usePrivateAxios from './private-axios'
 
 // AUTH Calls
 export const Login = (body) => {
@@ -18,8 +19,10 @@ export const Refresh = (body) => {
 
 // COWS Calls
 export const GetCows = (accessToken) => {
-    setAuthHeader(accessToken)
-    return axios.get(COWS)
+    const axiosPrivate = usePrivateAxios()
+    return axiosPrivate.get(COWS)
+    // setAuthHeader(accessToken)
+    // return axios.get(COWS)
 }
 
 export const CreateCow = (accessToken, body) => {
