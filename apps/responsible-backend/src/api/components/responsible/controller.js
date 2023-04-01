@@ -4,7 +4,7 @@ const { createResponsible, deleteResponsible, getResponsibles } = require('./ser
 const createAccount = yup.object().shape({
     email: yup.string().email('Invalid email').required('Email is required'),
     password: yup.string().min(6, 'Minium 6 characters').max(30, 'Maximum 30 characters').required('Password is required'),
-    fullName: yup.string().min(6, 'Minium 8 characters').max(30, 'Maximum 30 characters').required('full Name is required'),
+    fullName: yup.string().min(6, 'Minium 6 characters').max(30, 'Maximum 30 characters').required('full Name is required'),
     role: yup.string().oneOf(['admin', 'moderator'], 'Invalid option selected').required('User Role is required')
 })
 exports.createResponsible = async (req, res, next) => {

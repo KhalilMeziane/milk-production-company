@@ -11,7 +11,6 @@ exports.login = async ({ email, password }) => {
         const data = JSON.parse(db)
         const { users } = data
         const user = users.find(user => user.email === email)
-        console.log('user: ', user)
         if (!user) {
             reject(createError.BadRequest('Invalid email or password'))
         }
@@ -24,13 +23,12 @@ exports.login = async ({ email, password }) => {
                 return Promise.all([
                     signAccessToken({ id: user.id, fullName: user.fullName, role: user.role }),
                     signRefreshToken({ id: user.id, fullName: user.fullName, role: user.role }),
-                    data,
                     targetUser
                 ])
             })
             .then(obj => {
-                const [accessToken, refreshToken, data, user] = obj
-                const newUsers = data.users.map(user => {
+                const [accessToken, refreshToken, targetUser] = obj
+                const newUsers = users.map(user => {
                     if (user.email === email) {
                         return {
                             ...user,
@@ -43,7 +41,7 @@ exports.login = async ({ email, password }) => {
                 fs.writeFile(dbUri, JSON.stringify({ ...data, users: newUsers }), 'utf8', (err) => {
                     if (err) throw err
                 })
-                return resolve({ ...user, accessToken, refreshToken })
+                return resolve({ ...targetUser, accessToken, refreshToken })
             })
             .catch(error => {
                 console.log('S error: ', error)
