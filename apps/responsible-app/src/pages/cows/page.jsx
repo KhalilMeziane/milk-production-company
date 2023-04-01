@@ -96,6 +96,7 @@ export default function Cows () {
                     h={'full'}
                     overflowX="auto"
                     optionsList={[AddCow, Filter]}
+                    clearFilter={true}
                 />
             </Layout>
         </>

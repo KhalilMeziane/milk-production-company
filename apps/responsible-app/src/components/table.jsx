@@ -10,7 +10,7 @@ import { AiOutlineSearch } from 'react-icons/ai'
 import { RiFilterOffLine } from 'react-icons/ri'
 import { useSearchParams } from 'react-router-dom'
 
-export default function CustomTable ({ data, columns: cols, title, optionsList, ...props }) {
+export default function CustomTable ({ data, columns: cols, title, optionsList, clearFilter, ...props }) {
     const [, setSearchParams] = useSearchParams()
     const columns = useMemo(() => [...cols], [cols])
     const tableProps = useTable(
@@ -29,7 +29,9 @@ export default function CustomTable ({ data, columns: cols, title, optionsList, 
             <Flex justifyContent="space-between" py={'3'} bg={'white'}>
                 <SearchComponent preGlobalFilteredRows={tableProps.preGlobalFilteredRows} globalFilter={tableProps.globalFilter} setGlobalFilter={tableProps.setGlobalFilter} />
                 <HStack>
-                    <IconButton variant='solid' colorScheme='gray' icon={<RiFilterOffLine />} onClick={() => { tableProps.setAllFilters([]); setSearchParams({}) }} />
+                    {
+                        clearFilter && <IconButton variant='solid' colorScheme='gray' icon={<RiFilterOffLine />} onClick={() => { tableProps.setAllFilters([]); setSearchParams({}) }} />
+                    }
                     {
                         optionsList && optionsList.map((Item, index) => <Item setFilter={tableProps.setFilter} key={index}/>)
                     }
@@ -183,7 +185,8 @@ CustomTable.propTypes = {
     data: PropTypes.array.isRequired,
     columns: PropTypes.array.isRequired,
     title: PropTypes.string.isRequired,
-    optionsList: PropTypes.array
+    optionsList: PropTypes.array,
+    clearFilter: PropTypes.bool
 }
 
 TableHead.propTypes = {
