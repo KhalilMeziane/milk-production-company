@@ -56,13 +56,14 @@ exports.deleteResponsible = async ({ id }) => {
     })
 }
 
-exports.getResponsibles = async () => {
+exports.getResponsibles = async (id) => {
     return new Promise((resolve, reject) => {
         try {
             const db = fs.readFileSync(dbUri)
             const data = JSON.parse(db)
             const { users } = data
-            return resolve(users)
+            const filteredList = users.filter(user => user.id !== id)
+            return resolve(filteredList)
         } catch (error) {
             console.log('S error: ', error)
             return reject(createError.InternalServerError())

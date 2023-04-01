@@ -41,8 +41,9 @@ exports.deleteResponsible = async (req, res, next) => {
 }
 
 exports.getResponsibles = async (req, res, next) => {
+    const { id } = req.user
     try {
-        const users = await getResponsibles()
+        const users = await getResponsibles(id)
         res.status(200).json({ users })
     } catch (error) {
         if (error.errors) {
