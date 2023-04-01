@@ -16,3 +16,6 @@ export const RESPONSIBLE = `${BASE_URL}/responsibles`
 
 // examinations
 export const EXAMINATION = `${BASE_URL}/examinations`
+
+// profile
+export const PROFILE = `${BASE_URL}/profile`
