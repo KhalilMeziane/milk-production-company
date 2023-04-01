@@ -1,6 +1,6 @@
 import axios from 'axios'
 import setAuthHeader from './set-auth-header'
-import { LOGIN, LOGOUT, REFRESH, COWS, MILKS, RESPONSIBLE } from './end-pointes'
+import { LOGIN, LOGOUT, REFRESH, COWS, MILKS, RESPONSIBLE, EXAMINATION } from './end-pointes'
 
 // AUTH Calls
 export const Login = (body) => {
@@ -72,4 +72,30 @@ export const GetResponsibles = (accessToken) => {
 export const DeleteResponsible = (accessToken, id) => {
     setAuthHeader(accessToken)
     return axios.delete(`${RESPONSIBLE}/${id}`)
+}
+
+// EXAMINATION Calls
+export const GetExaminations = (accessToken) => {
+    setAuthHeader(accessToken)
+    return axios.get(EXAMINATION)
+}
+
+export const GetExamination = (accessToken, id) => {
+    setAuthHeader(accessToken)
+    return axios.get(`${EXAMINATION}/${id}`)
+}
+
+export const CreateExamination = (accessToken, body) => {
+    setAuthHeader(accessToken)
+    return axios.post(EXAMINATION, body)
+}
+
+export const DeleteExamination = (accessToken, id) => {
+    setAuthHeader(accessToken)
+    return axios.delete(`${EXAMINATION}/${id}`)
+}
+
+export const UpdateExamination = (accessToken, id, body) => {
+    setAuthHeader(accessToken)
+    return axios.patch(`${EXAMINATION}/${id}`, body)
 }
