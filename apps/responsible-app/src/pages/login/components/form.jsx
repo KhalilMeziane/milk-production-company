@@ -4,10 +4,11 @@ import { Form } from 'formik'
 import { Button, Text } from '@chakra-ui/react'
 import * as yup from 'yup'
 import { Navigate } from 'react-router-dom'
+import axios from 'axios'
 
 import FormCustom from '@components/forms/form'
 import Input from '@components/forms/fields/input'
-import { Login } from '@services/http-client'
+import { LOGIN } from '@services/end-pointes'
 import { Store } from '@store/context'
 
 const initialValues = { email: '', password: '' }
@@ -24,7 +25,7 @@ export default function LoginForm () {
     const handelSubmit = async (values) => {
         try {
             setLoading(true)
-            const { data } = await Login(values)
+            const { data } = await axios.post(LOGIN, values)
             localStorage.setItem('auth', JSON.stringify(data))
             dispatch({ type: 'AUTH_LOGIN', payload: data })
             return <Navigate to="/cows" />

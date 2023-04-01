@@ -2,13 +2,13 @@ import { useEffect, useContext } from 'react'
 
 import axios from 'axios'
 import { Store } from '@store/context'
-import { Refresh } from './http-client'
+import { REFRESH } from './end-pointes'
 
 const usePrivateAxios = () => {
     const [state, dispatch] = useContext(Store)
     const { auth } = state
     const refresh = async () => {
-        const { data } = await Refresh(auth.refreshToken)
+        const { data } = await axios.post(REFRESH, auth.refreshToken)
         return data
     }
 
