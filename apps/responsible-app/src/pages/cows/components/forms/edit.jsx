@@ -52,7 +52,7 @@ export default function EditCow ({ onClose, data }) {
                                     <option value="holstein">Holstein</option>
                                     <option value="montbliard">Montbliard</option>
                                 </Select>
-                                <Input label="Entry Date" name="entryDate" type="date" />
+                                <Input label="Entry Date" name="entryDate" type="date" max={new Date().toISOString().split('T')[0]} />
                                 <HStack justifyContent="flex-end" mt="2">
                                     <Button px="5" rounded="sm" colorScheme="brand" variant="outline" fontWeight="medium" onClick={onClose}>Close</Button>
                                     <Button type="submit" rounded="sm" color='white' bg="brand.900" colorScheme="brand" isLoading={isLoading}>Update</Button>

@@ -48,7 +48,7 @@ export default function EditMedical ({ onClose, disease, fetchCowExamination }) 
                                     <option value="Botulism">Botulism</option>
                                     <option value="Brucellosis">Brucellosis</option>
                                 </Select>
-                                <Input label="Medical Examinations Date" name="entryDate" type="date" />
+                                <Input label="Medical Examinations Date" name="entryDate" type="date" max={new Date().toISOString().split('T')[0]} />
                                 <HStack justifyContent="flex-end" mt="2">
                                     <Button px="5" rounded="sm" colorScheme="brand" variant="outline" fontWeight="medium" onClick={onClose}>Close</Button>
                                     <Button type="submit" rounded="sm" color='white' bg="brand.900" colorScheme="brand" isLoading={isLoading} >Submit</Button>
