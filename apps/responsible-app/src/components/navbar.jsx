@@ -43,7 +43,7 @@ export default function Navbar (props) {
             justifyContent={{ base: 'space-between' }}
             {...props}
         >
-            <Heading display={{ base: 'none', md: 'block' }} as="h1" size="lg" fontWeight="semibold" textColor="gray.900">{Brand}</Heading>
+            <Heading as="h1" size="lg" fontWeight="semibold" textColor="gray.900">{Brand}</Heading>
             <HStack spacing={{ base: '0', md: '6' }}>
                 <Flex alignItems={'center'} gap="2">
                     <Menu zIndex="2">
@@ -54,7 +54,7 @@ export default function Navbar (props) {
                             <HStack>
                                 <Avatar
                                     size={'sm'}
-                                    name="meziane khalil"
+                                    name={state.auth.fullName}
                                 />
                                 <Box display={{ base: 'none', md: 'flex' }}>
                                     <FiChevronDown />
