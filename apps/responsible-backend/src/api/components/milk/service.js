@@ -16,6 +16,10 @@ exports.createMilk = ({ addedBy, size, entryDate }) => {
         try {
             const db = fs.readFileSync(dbUri)
             const data = JSON.parse(db)
+            const isMatchDate = data.milks.find(milk => milk.entryDate === entryDate)
+            if (isMatchDate) {
+                return reject(createError.Conflict('Date is already Register'))
+            }
             data.milks.push(milk)
             fs.writeFile(dbUri, JSON.stringify({ ...data }), 'utf8', (err) => {
                 if (err) throw err
@@ -34,6 +38,12 @@ exports.updateMilk = ({ id, body }) => {
             const db = fs.readFileSync(dbUri)
             const data = JSON.parse(db)
             const { milks } = data
+
+            const isMatchDate = milks.find(milk => milk.id !== id && milk.entryDate === body.entryDate)
+            if (isMatchDate) {
+                return reject(createError.Conflict('Date is already Register'))
+            }
+
             const targetMilkDay = milks.find(milk => milk.id === id)
             if (!targetMilkDay) {
                 return reject(createError.NotFound())
