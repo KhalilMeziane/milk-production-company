@@ -2,7 +2,7 @@ const yup = require('yup')
 const { createExamination, updateExamination, deleteExamination, getExamination } = require('./service')
 
 const examinationSchema = yup.object({
-    entryDate: yup.date().required('entry Date is required'),
+    entryDate: yup.date().max(new Date(), 'Entry Date cannot be in the future').required('entry Date is required'),
     cowId: yup.string().required('cow Id is required'),
     disease: yup.string().oneOf(['Bluetongue', 'Botulism', 'Brucellosis'], 'Invalid option selected').required('Disease is required')
 })
@@ -23,7 +23,7 @@ exports.createExamination = async (req, res, next) => {
 }
 
 const updateExaminationSchema = yup.object({
-    entryDate: yup.date().required('entry Date is required'),
+    entryDate: yup.date().max(new Date(), 'Entry Date cannot be in the future').required('entry Date is required'),
     disease: yup.string().oneOf(['Bluetongue', 'Botulism', 'Brucellosis'], 'Invalid option selected').required('Disease is required')
 })
 exports.updateExamination = async (req, res, next) => {

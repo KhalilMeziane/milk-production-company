@@ -3,7 +3,7 @@ const { createMilk, updateMilk, deleteMilk, getMilks } = require('./service')
 
 const milkSchema = yup.object({
     size: yup.number('milk size must be number').required('Milk Size is required'),
-    entryDate: yup.date().required('entry Date is required')
+    entryDate: yup.date().max(new Date(), 'Entry Date cannot be in the future').required('entry Date is required')
 })
 exports.createMilk = async (req, res, next) => {
     const { size, entryDate } = req.body
@@ -24,7 +24,7 @@ exports.createMilk = async (req, res, next) => {
 
 const updateMilkSchema = yup.object({
     size: yup.number().typeError('you must specify a number').positive('Must be a positive number.').min(1, 'Milk size must be greater than or equal to 1').required('Milk Size must be Number'),
-    entryDate: yup.date().required('entry Date is required')
+    entryDate: yup.date().max(new Date(), 'Entry Date cannot be in the future').required('entry Date is required')
 })
 exports.updateMilk = async (req, res, next) => {
     const { size, entryDate } = req.body
