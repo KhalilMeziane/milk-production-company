@@ -1,33 +1,31 @@
 import React, { useState, useContext } from 'react'
 
 import PropTypes from 'prop-types'
-import { Button, HStack, Text } from '@chakra-ui/react'
+import { Button, HStack } from '@chakra-ui/react'
 import { Form } from 'formik'
 import * as yup from 'yup'
 
 import FormCustom from '@components/forms/form'
 import { Select, Input } from '@components/forms/fields/_index'
 import { Store } from '@store/context'
-import { CreateExamination } from '@services/http-client'
+import { UpdateExamination } from '@services/http-client'
 
-const initialValues = { disease: '', date: '' }
 const validationSchema = yup.object().shape({
     entryDate: yup.date().required('entry Date is required'),
     disease: yup.string().oneOf(['Bluetongue', 'Botulism', 'Brucellosis'], 'Invalid option selected').required('Disease is required')
 })
 
-export default function Medical ({ onClose, data }) {
-    const { id: cowId } = data
-    const [error, setError] = useState(false)
+export default function EditMedical ({ onClose, disease, fetchCowExamination }) {
+    const initialValues = { disease: disease.disease, entryDate: disease.entryDate }
     const [isLoading, setLoading] = useState(false)
     const [state] = useContext(Store)
     const handelSubmit = async (values) => {
         try {
             setLoading(true)
-            await CreateExamination(state.auth.accessToken, { ...values, cowId })
+            await UpdateExamination(state.auth.accessToken, disease.id, values)
+            await fetchCowExamination()
             onClose()
         } catch (error) {
-            setError('Error when try to create Medical')
             console.log('http error: ', error.response)
         } finally {
             setLoading(false)
@@ -35,9 +33,6 @@ export default function Medical ({ onClose, data }) {
     }
     return (
         <>
-            {
-                error && <Text textAlign={'center'} textTransform={'capitalize'} py={3} px={2} color='red.500' rounded='sm' bg={'red.50'} mb='4'>{error}</Text>
-            }
             <FormCustom
                 initialValues={initialValues}
                 validationSchema={validationSchema}
@@ -67,7 +62,8 @@ export default function Medical ({ onClose, data }) {
     )
 }
 
-Medical.propTypes = {
+EditMedical.propTypes = {
     onClose: PropTypes.func.isRequired,
-    data: PropTypes.object.isRequired
+    disease: PropTypes.object.isRequired,
+    fetchCowExamination: PropTypes.func.isRequired
 }

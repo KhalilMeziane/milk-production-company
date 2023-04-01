@@ -1,13 +1,14 @@
+/* eslint-disable react/prop-types */
 import React, { useEffect, useContext, useState } from 'react'
 
 import PropTypes from 'prop-types'
-import { HStack, Text, Button, VStack, Grid, GridItem, IconButton, Heading, Divider } from '@chakra-ui/react'
-import { AiOutlineAppstoreAdd } from 'react-icons/ai'
+import { HStack, Text, Button, VStack, Grid, GridItem, IconButton, Heading, Divider, useDisclosure, PopoverTrigger, PopoverContent, PopoverArrow, PopoverCloseButton, Popover } from '@chakra-ui/react'
+import { AiOutlineAppstoreAdd, AiOutlineDelete, AiOutlineEdit } from 'react-icons/ai'
 import { CiFilter } from 'react-icons/ci'
 
 import { Modal } from '@components/_index'
-import { AddCow as AddCowForm, Filter as FilterForm } from './forms/_index'
-import { GetExamination } from '@services/http-client'
+import { AddCow as AddCowForm, Filter as FilterForm, EditMedical } from './forms/_index'
+import { GetExamination, DeleteExamination } from '@services/http-client'
 import { Store } from '@store/context'
 
 export const AddCow = () => {
@@ -52,6 +53,14 @@ export const ViewCow = ({ onClose, data }) => {
             controller.abort()
         }
     }, [])
+    const HandelDelete = async (id) => {
+        try {
+            await DeleteExamination(state.auth.accessToken, id)
+            await fetchCowExamination()
+        } catch (error) {
+            console.log('error: ', error.response)
+        }
+    }
     return (
         <>
             <VStack alignItems="flex-start" w="full" py="2">
@@ -104,7 +113,7 @@ export const ViewCow = ({ onClose, data }) => {
                 <Grid
                     templateRows='repeat(2, 1fr)'
                     templateColumns='repeat(4, 1fr)'
-                    gap={1.5}
+                    gap={1}
                     w="full"
                 >
                     {
@@ -121,6 +130,10 @@ export const ViewCow = ({ onClose, data }) => {
                                                 <Text>Diesis:</Text>
                                                 <Text>{disease?.disease}</Text>
                                             </HStack>
+                                            <HStack>
+                                                <PopoverComponent disease={disease} fetchCowExamination={fetchCowExamination} />
+                                                <PopoverComponentDelete disease={disease} fetchCowExamination={fetchCowExamination} HandelDelete={HandelDelete} />
+                                            </HStack>
                                         </HStack>
                                     </GridItem>
                                 )
@@ -132,6 +145,55 @@ export const ViewCow = ({ onClose, data }) => {
             <HStack justifyContent="flex-end" mt="2">
                 <Button px="5" rounded="sm" colorScheme="gray" variant="outline" fontWeight="medium" onClick={onClose}>Close</Button>
             </HStack>
+        </>
+    )
+}
+
+const PopoverComponent = ({ disease, fetchCowExamination }) => {
+    const { onOpen, onClose, isOpen } = useDisclosure()
+    return (
+        <>
+            <Popover
+                isOpen={isOpen}
+                onOpen={onOpen}
+                onClose={onClose}
+                placement='right'
+                closeOnBlur={false}
+            >
+                <PopoverTrigger>
+                    <IconButton rounded="sm" colorScheme='brand' variant='ghost' fontSize='24px' icon={<AiOutlineEdit/>}></IconButton>
+                </PopoverTrigger>
+                <PopoverContent p={5}>
+                    <PopoverArrow />
+                    <PopoverCloseButton />
+                    <EditMedical fetchCowExamination={fetchCowExamination} disease={disease} onClose={onClose} />
+                </PopoverContent>
+            </Popover>
+        </>
+    )
+}
+
+const PopoverComponentDelete = ({ disease, fetchCowExamination, HandelDelete }) => {
+    const { onOpen, onClose, isOpen } = useDisclosure()
+    return (
+        <>
+            <Popover
+                isOpen={isOpen}
+                onOpen={onOpen}
+                onClose={onClose}
+                placement='right'
+                closeOnBlur={false}
+            >
+                <PopoverTrigger>
+                    <IconButton rounded="sm" colorScheme='red' variant='ghost' fontSize='24px' icon={<AiOutlineDelete/>}></IconButton>
+                </PopoverTrigger>
+                <PopoverContent p={5}>
+                    <PopoverArrow />
+                    <PopoverCloseButton />
+                    <Text mb="2">This action is not reversible. Please be certain.</Text>
+                    <Button colorScheme='red' variant="outline" onClick={() => HandelDelete(disease.id)}>Yes</Button>
+                </PopoverContent>
+            </Popover>
         </>
     )
 }

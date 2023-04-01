@@ -75,11 +75,6 @@ export const DeleteResponsible = (accessToken, id) => {
 }
 
 // EXAMINATION Calls
-export const GetExaminations = (accessToken) => {
-    setAuthHeader(accessToken)
-    return axios.get(EXAMINATION)
-}
-
 export const GetExamination = (accessToken, id) => {
     setAuthHeader(accessToken)
     return axios.get(`${EXAMINATION}/${id}`)
