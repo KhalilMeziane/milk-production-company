@@ -61,10 +61,11 @@ exports.updatePassword = ({ id, body }) => {
         }
         return comparePassword(user.password, body.oldPassword)
             .then(match => {
-                if (!match) {
+                if (match) {
+                    return hashPassword(body.newPassword)
+                } else {
                     return reject(createError.BadRequest('Password Not Match'))
                 }
-                return hashPassword(body.newPassword)
             })
             .then(hash => {
                 const usersList = users.map(user => {

@@ -8,8 +8,9 @@ export default function Form ({ initialValues, validationSchema, handelSubmit, c
         <Formik
             initialValues={initialValues}
             validationSchema={validationSchema}
-            onSubmit={(values) => {
-                handelSubmit(values)
+            onSubmit={(values, actions) => {
+                console.log(actions)
+                handelSubmit(values, actions)
             }}
         >
             {children}

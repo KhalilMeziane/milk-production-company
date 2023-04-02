@@ -40,11 +40,10 @@ const UpdateInfo = ({ onClose, user }) => {
         fullName: yup.string().min(6, 'Minium 6 characters').max(30, 'Maximum 30 characters').required('full Name is required')
     })
     const initialValues = { fullName: user.fullName, email: user.email }
-    const [error, setError] = useState(false)
     const [isLoading, setLoading] = useState(false)
     const [, dispatch] = useContext(Store)
     const axiosPrivate = usePrivateAxios()
-    const handelSubmit = async (values) => {
+    const handelSubmit = async (values, actions) => {
         try {
             setLoading(true)
             const { data } = await axiosPrivate.patch(PROFILE, values)
@@ -52,7 +51,7 @@ const UpdateInfo = ({ onClose, user }) => {
             dispatch({ type: 'AUTH_LOGIN', payload: data })
             onClose()
         } catch (error) {
-            setError('Error when try to update Profile Info')
+            actions.setFieldError('email', 'Email all ready Taken')
             console.log('http error: ', error.response)
         } finally {
             setLoading(false)
@@ -60,9 +59,6 @@ const UpdateInfo = ({ onClose, user }) => {
     }
     return (
         <>
-            {
-                error && <Text textAlign={'center'} w='full' textTransform={'capitalize'} py={3} px={2} color='red.500' rounded='sm' bg={'red.50'} mb='4'>{error}</Text>
-            }
             <FormCustom
                 initialValues={initialValues}
                 validationSchema={validationSchema}
@@ -90,16 +86,15 @@ const UpdatePassword = ({ onClose }) => {
         oldPassword: yup.string().min(6, 'Minium 6 characters').max(30, 'Maximum 30 characters').required('Password is required')
     })
     const initialValues = { newPassword: '', oldPassword: '' }
-    const [error, setError] = useState(false)
     const [isLoading, setLoading] = useState(false)
     const axiosPrivate = usePrivateAxios()
-    const handelSubmit = async (values) => {
+    const handelSubmit = async (values, actions) => {
         try {
             setLoading(true)
             await axiosPrivate.patch(`${PROFILE}/password`, values)
             onClose()
         } catch (error) {
-            setError('Error when try to update Profile Info')
+            actions.setFieldError('oldPassword', 'Old password not match')
             console.log('http error: ', error.response)
         } finally {
             setLoading(false)
@@ -107,9 +102,6 @@ const UpdatePassword = ({ onClose }) => {
     }
     return (
         <>
-            {
-                error && <Text textAlign={'center'} w='full' textTransform={'capitalize'} py={3} px={2} color='red.500' rounded='sm' bg={'red.50'} mb='4'>{error}</Text>
-            }
             <FormCustom
                 initialValues={initialValues}
                 validationSchema={validationSchema}

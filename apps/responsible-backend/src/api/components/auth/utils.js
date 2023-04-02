@@ -11,18 +11,21 @@ exports.hashPassword = async (password) => {
     }
 }
 
-exports.comparePassword = async function (hashPassword, password) {
-    try {
-        const check = await argon2.verify(hashPassword, password)
-        if (!check) {
-            return false
-        } else {
-            return true
-        }
-    } catch (error) {
-        console.log('error when try to comparePassword password: ', error)
-        return error
-    }
+exports.comparePassword = (hashPassword, password) => {
+    return new Promise((resolve, reject) => {
+        return argon2.verify(hashPassword, password)
+            .then(check => {
+                if (check) {
+                    return resolve(true)
+                } else {
+                    return reject(new Error('Password not match'))
+                }
+            })
+            .catch(error => {
+                console.log('error when try to comparePassword password: ', error)
+                return reject(error)
+            })
+    })
 }
 
 exports.signAccessToken = ({ id, fullName, role }) => {
