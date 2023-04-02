@@ -1,18 +1,21 @@
-import React, { useContext } from 'react'
+import React, { useContext, Suspense, lazy } from 'react'
 
 import { createBrowserRouter, RouterProvider, Navigate, Outlet } from 'react-router-dom'
 
 import { Store } from '@store/context'
+import { Flex, Text } from '@chakra-ui/react'
 
-import Login from '@pages/login/page'
-import Cows from '@pages/cows/page'
-import Users from '@pages//responsible/page'
-import Milk from '@pages/milk/page'
-import NotFound from '@pages/notFound/page'
+const Login = lazy(() => import('@pages/login/page'))
+const Cows = lazy(() => import('@pages/cows/page'))
+const Users = lazy(() => import('@pages/responsible/page'))
+const Milk = lazy(() => import('@pages/milk/page'))
+const NotFound = lazy(() => import('@pages/notFound/page'))
 
 const routes = createBrowserRouter([
     {
-        element: <PublicRoute />,
+        element: (<Suspense fallback={<Loading />}>
+            <PublicRoute />
+        </Suspense>),
         children: [
             {
                 path: '/',
@@ -21,7 +24,9 @@ const routes = createBrowserRouter([
         ]
     },
     {
-        element: <ProtectedRoute />,
+        element: (<Suspense fallback={<Loading />}>
+            <ProtectedRoute />
+        </Suspense>),
         children: [
             {
                 path: '/cows',
@@ -79,4 +84,17 @@ function AdminRoute () {
         return <Navigate to='/404' />
     }
     return <Outlet />
+}
+
+function Loading () {
+    return (
+        <Flex
+            minH={'100vh'}
+            align={'center'}
+            justify={'center'}
+            bg={'gray.50'}
+        >
+            <Text fontSize={'3xl'}>Loading...</Text>
+        </Flex>
+    )
 }
