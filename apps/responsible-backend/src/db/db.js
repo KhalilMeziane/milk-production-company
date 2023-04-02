@@ -11,7 +11,7 @@ const MockupData = {
             fullName: 'admin',
             email: 'admin@gmail.com',
             role: 'admin',
-            password: '$argon2id$v=19$m=65536,t=3,p=4$NI1KbhIP0IL4tWAqOQmeOg$Gn3RVAm8q1lOKc0QZEDEZ8f7QPDBI655V2k+N7bTJ9c'
+            password: '$argon2id$v=19$m=65536,t=3,p=4$WmBwtER3nUWxDTX/jM7uIA$6blTPjufMQBnf1d4d5OfyDIKKZOBhy8Qyyd3oRATq5A'
         }
     ],
     cows: [],
@@ -22,8 +22,7 @@ const MockupData = {
 exports.readData = () => {
     try {
         if (!fs.existsSync(dbUri)) {
-            fs.mkdirSync(dbUri)
-            fs.writeFile(dbUri, JSON.stringify(MockupData), 'utf8', (error) => {
+            fs.writeFileSync(dbUri, JSON.stringify(MockupData), 'utf8', (error) => {
                 if (error) throw error
             })
         }

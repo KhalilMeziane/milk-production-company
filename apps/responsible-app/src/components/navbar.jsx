@@ -31,6 +31,8 @@ export default function Navbar (props) {
             navigate('/')
             localStorage.removeItem('auth')
         } catch (error) {
+            localStorage.removeItem('auth')
+            navigate('/')
             console.log('error: ', error.response)
         }
     }
@@ -39,7 +41,7 @@ export default function Navbar (props) {
             const { data } = await axiosPrivate.get(PROFILE)
             dispatch({ type: 'AUTH_REFRESH', payload: data.profile })
         } catch (error) {
-            console.log('error')
+            localStorage.removeItem('auth')
             return <Navigate to="/" />
         }
     }, [])
