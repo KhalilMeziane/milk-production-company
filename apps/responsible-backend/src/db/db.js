@@ -11,7 +11,7 @@ const MockupData = {
             fullName: 'admin',
             email: 'admin@gmail.com',
             role: 'admin',
-            password: '$argon2id$v=19$m=65536,t=3,p=4$WmBwtER3nUWxDTX/jM7uIA$6blTPjufMQBnf1d4d5OfyDIKKZOBhy8Qyyd3oRATq5A'
+            password: '$argon2id$v=19$m=65536,t=3,p=4$NnVeP1zV+sg8P2CEUjIBNg$X9Kd8v1b4LpHXtGczxp1O9rlc5FEQHtUNPn4lmm3AQU'
         }
     ],
     cows: [],

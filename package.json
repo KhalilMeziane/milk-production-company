@@ -5,6 +5,10 @@
   "workspaces": [
     "apps/*"
   ],
+  "packages": [
+    "apps/responsible-app",
+    "apps/responsible-backend"
+  ],
   "scripts": {
     "build": "turbo run build",
     "dev": "turbo run dev",
