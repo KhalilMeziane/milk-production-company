@@ -56,7 +56,7 @@ export const ViewCow = ({ onClose, data }) => {
 
     const HandelDelete = async (id) => {
         try {
-            await axiosPrivate.patch(`${EXAMINATION}/${id}`)
+            await axiosPrivate.delete(`${EXAMINATION}/${id}`)
             await fetchCowExamination()
         } catch (error) {
             console.log('error: ', error.response)
