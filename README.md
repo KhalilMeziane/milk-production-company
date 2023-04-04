@@ -23,7 +23,7 @@ The responsible-backend will be the back-end application, which will handle all 
 ## Apps
 
 - `responsible-app`: a [React.Js](https://reactjs.org/) app
-- `responsible-backend`: a expressJs [Express.js](https://expressjs.com/) app
+- `responsible-backend`: a [Express.js](https://expressjs.com/) app
 
 ## Technology Stack for Client App
 Here is a list of the technology stack for a client-side:
